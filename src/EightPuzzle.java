@@ -9,7 +9,9 @@ public class EightPuzzle {
         for (int i = 0; i < puzzle.length; i++) {
             if (i != puzzle[i]) {
                 break;
-            } else {
+            }
+
+            if (i == 8) {
                 return -1;
             }
         }
@@ -27,14 +29,14 @@ public class EightPuzzle {
         }
 
 // Debugging
-//        System.out.println("Number of inversions: " + numberOfInversions);
+        System.out.println("Number of inversions: " + numberOfInversions);
 //        int parity = numberOfInversions % 2;
 //        System.out.println("Parity: " + parity);
 
         return numberOfInversions % 2;
     }
 
-    private int[][] generatePuzzles(int numberOfPuzzles) {
+    private int[][] generatePuzzles(int numberOfPuzzles, int depth) {
         int[][] generatedPuzzles = new int[numberOfPuzzles][9];
         return generatedPuzzles;
     }
@@ -53,10 +55,12 @@ public class EightPuzzle {
         EightPuzzle test = new EightPuzzle();
         int[] testPuzzle = {3, 1, 2, 6, 4, 5, 0, 7, 8};
         int[] testPuzzle1 = {3, 1,  2, 4, 0, 5, 6, 7, 8};
-        int[] solvedPuzzle = {0, 1, 2, 3, 4, 5, 7, 8};
+        int[] testPuzzled20 = {0, 5, 8, 2, 7, 6, 1, 3, 4};
+        int[] solvedPuzzle = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
         System.out.println(test.getParity(testPuzzle));
         System.out.println(test.getParity(testPuzzle1));
+        System.out.println(test.getParity(testPuzzled20));
         System.out.println(test.getParity(solvedPuzzle));
     }
 
