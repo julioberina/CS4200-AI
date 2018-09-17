@@ -1,18 +1,19 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
 public class EightPuzzle {
 
-    // Return the value of invariant (0 for even, 1 for odd. Add value to an array, check the array for uniformity)
-    private int getParity(int[] puzzle) {
+
+    private boolean isSolvable(int[] puzzle) {
         // Checking for an already solved puzzle
         for (int i = 0; i < puzzle.length; i++) {
             if (i != puzzle[i]) {
                 break;
             }
             if (i == 8) {
-                return -1;
+                return false;
             }
         }
 
@@ -29,11 +30,16 @@ public class EightPuzzle {
         }
 
 // Debugging
-        System.out.println("Number of inversions: " + numberOfInversions);
-//        int parity = numberOfInversions % 2;
+//        System.out.println("Number of inversions: " + numberOfInversions);
 //        System.out.println("Parity: " + parity);
 
-        return numberOfInversions % 2;
+        int parity = numberOfInversions % 2;
+        if (parity == 0) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     private static void shufflePuzzle(int[] puzzle) {
@@ -72,9 +78,28 @@ public class EightPuzzle {
         return generatedPuzzles;
     }
 
+    private void printTable(HashMap<Integer, ArrayList<Integer>> data) {
+        String leftAlignFormat = "| %-2d | %-6d | %-5d | %n";
+        System.out.format("+---+---------+-------+%n");
+        System.out.format("| d |   h1    |  h2   |%n");
+        System.out.format("+---+---------+-------+%n");
 
-    private void printTable() {
+        int i = 2;
+        while ((i / 2) < data.size()) {
+            ArrayList<Integer> searchCostList;
+            if (data.containsKey(i)) {
+                searchCostList = data.get(i);
+                int h1 = searchCostList.get(0);
+                int h2 = searchCostList.get(1);
 
+                System.out.format(leftAlignFormat, i , h1, h2);
+            } else {
+                System.out.format(leftAlignFormat, -1 , -1, -1);
+            }
+            i += 2;
+        }
+
+        System.out.format("+---+---------+-------+%n");
     }
 
     private HashMap<Integer, ArrayList<Integer>> aStar(boolean showOptSeq) {
@@ -90,14 +115,23 @@ public class EightPuzzle {
         int[] testPuzzled20 = {0, 5, 8, 2, 7, 6, 1, 3, 4};
         int[] solvedPuzzle = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
-        System.out.println(test.getParity(testPuzzle));
-        System.out.println(test.getParity(testPuzzle1));
-        System.out.println(test.getParity(testPuzzled20));
-        System.out.println(test.getParity(solvedPuzzle));
+        System.out.println(test.isSolvable(testPuzzle));
+        System.out.println(test.isSolvable(testPuzzle1));
+        System.out.println(test.isSolvable(testPuzzled20));
+        System.out.println(test.isSolvable(solvedPuzzle));
 
         // Testing puzzle generator
         int[][] testPuzzles = test.generatePuzzles(100);
 
+        // Testing printTable
+        HashMap<Integer, ArrayList<Integer>> testMap = new HashMap<Integer, ArrayList<Integer>>();
+        ArrayList<Integer> testList= new ArrayList<Integer>(Arrays.asList(10, 20));
+        testMap.put(2, testList);
+        testMap.put(4, testList);
+        testMap.put(6, testList);
+        testMap.put(5, testList);
+
+        test.printTable(testMap);
     }
 
 }
