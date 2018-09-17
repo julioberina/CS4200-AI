@@ -111,11 +111,6 @@ public class EightPuzzle {
         System.out.format("+---+---------+-------+%n");
     }
 
-    private HashMap<Integer, ArrayList<Integer>> aStar(boolean showOptSeq) {
-        // maybe....
-        HashMap<Integer, ArrayList<Integer>> solutionDepAndSearchCost = new HashMap<Integer, ArrayList<Integer>>();
-        return solutionDepAndSearchCost;
-    }
 
     public static void main(String [] args) {
         EightPuzzle test = new EightPuzzle();
@@ -162,6 +157,7 @@ public class EightPuzzle {
         testMap.put(5, testList);
 
         test.printTable(testMap);
+
     }
 
 }
