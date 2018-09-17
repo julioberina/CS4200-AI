@@ -5,18 +5,7 @@ import java.util.Random;
 
 public class EightPuzzle {
 
-
     private boolean isSolvable(int[] puzzle) {
-        // Checking for an already solved puzzle
-        for (int i = 0; i < puzzle.length; i++) {
-            if (i != puzzle[i]) {
-                break;
-            }
-            if (i == 8) {
-                return false;
-            }
-        }
-
         // Finding number of inversions
         int numberOfInversions = 0;
         for (int i = 0; i < puzzle.length; i++) {
@@ -42,6 +31,15 @@ public class EightPuzzle {
 
     }
 
+    private boolean isSolved(int[] puzzle) {
+        for (int i = 0; i < puzzle.length; i++) {
+            if (i != puzzle[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static void shufflePuzzle(int[] puzzle) {
         int index, temp;
         Random random = new Random();
@@ -54,6 +52,16 @@ public class EightPuzzle {
         }
     }
 
+    private int[] generatePuzzle() {
+       int[] generatedPuzzle = new int[9];
+       for (int i = 0; i < generatedPuzzle.length; i++) {
+           generatedPuzzle[i] = i;
+       }
+       shufflePuzzle(generatedPuzzle);
+       return generatedPuzzle;
+    }
+
+    // Might not use
     private int[][] generatePuzzles(int numberOfPuzzles) {
         int[][] generatedPuzzles = new int[numberOfPuzzles][9];
         for (int i = 0; i < generatedPuzzles.length; i++) {
@@ -78,6 +86,7 @@ public class EightPuzzle {
         return generatedPuzzles;
     }
 
+    // Needs to be changed to have a column for average runtime, and number of cases with a specific depth
     private void printTable(HashMap<Integer, ArrayList<Integer>> data) {
         String leftAlignFormat = "| %-2d | %-6d | %-5d | %n";
         System.out.format("+---+---------+-------+%n");
@@ -115,20 +124,41 @@ public class EightPuzzle {
         int[] testPuzzled20 = {0, 5, 8, 2, 7, 6, 1, 3, 4};
         int[] solvedPuzzle = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
+        System.out.println("Checking if solvable");
         System.out.println(test.isSolvable(testPuzzle));
         System.out.println(test.isSolvable(testPuzzle1));
         System.out.println(test.isSolvable(testPuzzled20));
         System.out.println(test.isSolvable(solvedPuzzle));
+        System.out.println();
+
+        System.out.println("Checking if solved");
+        System.out.println(test.isSolved(testPuzzle));
+        System.out.println(test.isSolved(testPuzzle1));
+        System.out.println(test.isSolved(testPuzzled20));
+        System.out.println(test.isSolved(solvedPuzzle));
+        System.out.println();
 
         // Testing puzzle generator
         int[][] testPuzzles = test.generatePuzzles(100);
+        int[] testGeneratedPuzzle = test.generatePuzzle();
+
+        for (int num : testGeneratedPuzzle) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+        System.out.println(test.isSolvable(testGeneratedPuzzle));
+        System.out.println(test.isSolved(testGeneratedPuzzle));
+
 
         // Testing printTable
+        System.out.println();
         HashMap<Integer, ArrayList<Integer>> testMap = new HashMap<Integer, ArrayList<Integer>>();
         ArrayList<Integer> testList= new ArrayList<Integer>(Arrays.asList(10, 20));
+        ArrayList<Integer> testList2 = new ArrayList<Integer>(Arrays.asList(30, 40));
         testMap.put(2, testList);
         testMap.put(4, testList);
         testMap.put(6, testList);
+        //testMap.put(4, testList2);
         testMap.put(5, testList);
 
         test.printTable(testMap);
