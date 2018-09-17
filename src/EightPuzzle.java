@@ -1,16 +1,16 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class EightPuzzle {
 
     // Return the value of invariant (0 for even, 1 for odd. Add value to an array, check the array for uniformity)
     private int getParity(int[] puzzle) {
-        // Checking for an already solved puzzle,
+        // Checking for an already solved puzzle
         for (int i = 0; i < puzzle.length; i++) {
             if (i != puzzle[i]) {
                 break;
             }
-
             if (i == 8) {
                 return -1;
             }
@@ -36,10 +36,42 @@ public class EightPuzzle {
         return numberOfInversions % 2;
     }
 
-    private int[][] generatePuzzles(int numberOfPuzzles, int depth) {
+    private static void shufflePuzzle(int[] puzzle) {
+        int index, temp;
+        Random random = new Random();
+        for (int i = 0; i < puzzle.length; i++) {
+            index = random.nextInt(puzzle.length);
+//            System.out.print(index);
+            temp = puzzle[index];
+            puzzle[index] = puzzle[i];
+            puzzle[i] = temp;
+        }
+    }
+
+    private int[][] generatePuzzles(int numberOfPuzzles) {
         int[][] generatedPuzzles = new int[numberOfPuzzles][9];
+        for (int i = 0; i < generatedPuzzles.length; i++) {
+            for (int j = 0; j < generatedPuzzles[i].length; j++) {
+                generatedPuzzles[i][j] = j;
+            }
+            shufflePuzzle(generatedPuzzles[i]);
+// Debugging
+//            System.out.println("Preshuffled");
+//            for (int num : generatedPuzzles[i]) {
+//                System.out.print(num + " ");
+//            }
+//
+//            System.out.println();
+//            System.out.println("Shuffled");
+//            for (int num : generatedPuzzles[i]) {
+//                System.out.print(num + " ");
+//            }
+//            System.out.println("\n\n");
+
+        }
         return generatedPuzzles;
     }
+
 
     private void printTable() {
 
@@ -62,6 +94,10 @@ public class EightPuzzle {
         System.out.println(test.getParity(testPuzzle1));
         System.out.println(test.getParity(testPuzzled20));
         System.out.println(test.getParity(solvedPuzzle));
+
+        // Testing puzzle generator
+        int[][] testPuzzles = test.generatePuzzles(100);
+
     }
 
 }
