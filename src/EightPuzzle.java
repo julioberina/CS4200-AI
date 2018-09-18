@@ -117,12 +117,14 @@ public class EightPuzzle {
         int[] testPuzzle = {3, 1, 2, 6, 4, 5, 0, 7, 8};
         int[] testPuzzle1 = {3, 1,  2, 4, 0, 5, 6, 7, 8};
         int[] testPuzzled20 = {0, 5, 8, 2, 7, 6, 1, 3, 4};
+        int[] testPuzzle3 = {7, 2, 4, 5, 0, 6, 8, 3, 1};
         int[] solvedPuzzle = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
         System.out.println("Checking if solvable");
         System.out.println(test.isSolvable(testPuzzle));
         System.out.println(test.isSolvable(testPuzzle1));
         System.out.println(test.isSolvable(testPuzzled20));
+        System.out.println(test.isSolvable(testPuzzle3));
         System.out.println(test.isSolvable(solvedPuzzle));
         System.out.println();
 
@@ -130,6 +132,7 @@ public class EightPuzzle {
         System.out.println(test.isSolved(testPuzzle));
         System.out.println(test.isSolved(testPuzzle1));
         System.out.println(test.isSolved(testPuzzled20));
+        System.out.println(test.isSolved(testPuzzle3));
         System.out.println(test.isSolved(solvedPuzzle));
         System.out.println();
 
@@ -153,10 +156,21 @@ public class EightPuzzle {
         testMap.put(2, testList);
         testMap.put(4, testList);
         testMap.put(6, testList);
-        //testMap.put(4, testList2);
         testMap.put(5, testList);
-
         test.printTable(testMap);
+        System.out.println();
+
+        System.out.println("Checking hamming");
+        AStar aTest = new AStar();
+        System.out.println(aTest.hammingH1(testPuzzle));
+        System.out.println(aTest.hammingH1(testPuzzle1));
+        System.out.println(aTest.hammingH1(testPuzzled20));
+        System.out.println(aTest.hammingH1(testPuzzle3));
+        System.out.println(aTest.hammingH1(solvedPuzzle));
+
+        System.out.println(aTest.manhattanH2(testPuzzle3));
+        System.out.println();
+
 
     }
 
