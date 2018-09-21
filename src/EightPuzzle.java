@@ -51,7 +51,15 @@ public class EightPuzzle {
     }
 
     public int getTileAt(int location) {
-        return puzzle[location - 1];
+        return puzzle[location];
+    }
+
+    private int[] swapTiles(int location1, int location2) {
+        int[] tempPuzzle = puzzle.clone();
+        int temp = tempPuzzle[location1];
+        tempPuzzle[location1] = tempPuzzle[location2];
+        tempPuzzle[location2] = temp;
+        return tempPuzzle;
     }
 
     private static void shufflePuzzle(int[] puzzle) {
@@ -136,17 +144,9 @@ public class EightPuzzle {
     }
 
     public int manhattanH2() {
-        // Converting puzzle to 2d array to calculate manhattan dist
-        int num = 0;
-        int[][] puzzle2d = new int[3][3];
-        for (int i = 0; i < puzzle2d.length; i++) {
-            for (int j = 0; j < puzzle2d[i].length; j++) {
-                puzzle2d[i][j] = puzzle[num];
-                num += 1;
-            }
-        }
+        int[][] puzzle2d = convertTo2D(puzzle);
 
-        num = 0;
+        int num = 0;
         int sumOfManhattan = 0;
         for (int y = 0; y < puzzle2d.length; y++) {
             for (int x = 0; x < puzzle2d[y].length; x++) {
@@ -159,6 +159,18 @@ public class EightPuzzle {
             }
         }
         return sumOfManhattan;
+    }
+
+    private static int[][] convertTo2D (int[] puzzle) {
+        int num = 0;
+        int[][] puzzle2d = new int[3][3];
+        for (int i = 0; i < puzzle2d.length; i++) {
+            for (int j = 0; j < puzzle2d[i].length; j++) {
+                puzzle2d[i][j] = puzzle[num];
+                num += 1;
+            }
+        }
+        return puzzle2d;
     }
 
     private static int[] getCorrectPosition(int num) {
@@ -178,7 +190,128 @@ public class EightPuzzle {
 
     public Iterable<EightPuzzle> neighboringBoards() {
         List<EightPuzzle> neighbors = new ArrayList<EightPuzzle>();
-        return neighbors;
+        // Convert to 2d array, find location of 0, generate a list of neighboring boards based off that pos
+        int locationOfZero = 0;
+        for (int i = 0; i < puzzle.length; i++) {
+            if (puzzle[i] == 0) {
+                locationOfZero = i;
+            }
+        }
+
+        System.out.println("Orig Puzzle: ");
+        for (int num: puzzle) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+
+        EightPuzzle neighborPuzzle;
+        int neighborArray[];
+        // If tile is in the middle ((1,1) in 2d array)
+        if (locationOfZero == 4) {
+            for (int i = 1; i <= 7; i = i + 2) {
+                neighborArray = swapTiles(locationOfZero, i);
+                neighborPuzzle = new EightPuzzle(neighborArray);
+                neighbors.add(neighborPuzzle);
+            }
+//            System.out.println("array1: ");
+//            for (int num: array1) {
+//                System.out.print(num + " ");
+//            }
+//            System.out.println();
+            return neighbors;
+        }
+        // top left corner
+        if (locationOfZero == 0) {
+            neighborArray = swapTiles(locationOfZero, 1);
+            neighborPuzzle = new EightPuzzle(neighborArray);
+            neighbors.add(neighborPuzzle);
+
+            neighborArray = swapTiles(locationOfZero, 3);
+            neighborPuzzle = new EightPuzzle(neighborArray);
+            neighbors.add(neighborPuzzle);
+            return neighbors;
+        }
+        // top right corner
+        if (locationOfZero == 2) {
+            neighborArray = swapTiles(locationOfZero, 1);
+            neighborPuzzle = new EightPuzzle(neighborArray);
+            neighbors.add(neighborPuzzle);
+
+            neighborArray = swapTiles(locationOfZero, 5);
+            neighborPuzzle = new EightPuzzle(neighborArray);
+            neighbors.add(neighborPuzzle);
+            return neighbors;
+        }
+        // bottom left corner
+        if (locationOfZero == 6) {
+            neighborArray = swapTiles(locationOfZero, 3);
+            neighborPuzzle = new EightPuzzle(neighborArray);
+            neighbors.add(neighborPuzzle);
+
+            neighborArray = swapTiles(locationOfZero, 7);
+            neighborPuzzle = new EightPuzzle(neighborArray);
+            neighbors.add(neighborPuzzle);
+            return neighbors;
+        }
+        // bottom right corner
+        if (locationOfZero == 8) {
+            neighborArray = swapTiles(locationOfZero, 5);
+            neighborPuzzle = new EightPuzzle(neighborArray);
+            neighbors.add(neighborPuzzle);
+
+            neighborArray = swapTiles(locationOfZero, 7);
+            neighborPuzzle = new EightPuzzle(neighborArray);
+            neighbors.add(neighborPuzzle);
+            return neighbors;
+        }
+        // top middle
+        if (locationOfZero == 1) {
+            for (int i = 0; i <= 4; i = i + 2) {
+                neighborArray = swapTiles(locationOfZero, i);
+                neighborPuzzle = new EightPuzzle(neighborArray);
+                neighbors.add(neighborPuzzle);
+                return neighbors;
+            }
+        }
+        // middle left
+        if (locationOfZero == 3) {
+            for (int i = 0; i <= 6; i = i + 2) {
+                if (i != 2) {
+                    neighborArray = swapTiles(locationOfZero, i);
+                    neighborPuzzle = new EightPuzzle(neighborArray);
+                    neighbors.add(neighborPuzzle);
+                    return neighbors;
+                }
+            }
+        }
+        //middle right
+        if (locationOfZero == 5) {
+            for (int i = 2; i <= 8; i = i + 2) {
+                if (i != 6) {
+                    neighborArray = swapTiles(locationOfZero, i);
+                    neighborPuzzle = new EightPuzzle(neighborArray);
+                    neighbors.add(neighborPuzzle);
+                    return neighbors;
+                }
+            }
+        }
+        // bottom middle
+        if (locationOfZero == 7) {
+            for (int i = 3; i <= 7; i = i + 2) {
+                neighborArray = swapTiles(locationOfZero, i);
+                neighborPuzzle = new EightPuzzle(neighborArray);
+                neighbors.add(neighborPuzzle);
+                return neighbors;
+            }
+        }
+
+        System.out.println("Orig Puzzle after swapping: ");
+        for (int num: puzzle) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+
+        return null;
     }
 
     // TODO: Get total number of lines in file, read in all lines skipping depth info
@@ -238,6 +371,8 @@ public class EightPuzzle {
         System.out.println();
 
 
+        System.out.println("Checking neighbors method");
+        test.neighboringBoards();
     }
 
 }
