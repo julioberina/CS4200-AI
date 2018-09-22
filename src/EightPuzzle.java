@@ -9,8 +9,6 @@ import java.io.IOException;
 // NOTE: When applying h1 and h2 they should both have the same solution depth
 // Solution cost should be close to the table
 // Catch bad input
-// h2 should be worse than h1
-// Can use graph search w/h2
 public class EightPuzzle {
     private int[] puzzle;
 
@@ -292,8 +290,7 @@ public class EightPuzzle {
         return null;
     }
 
-    // TODO: Get total number of lines in file, read in all lines skipping depth info
-    private int [] fileReader(String fileName, int line) {
+    private static int [] fileReader(String fileName, int line) {
         BufferedReader br = null;
         FileReader fr = null;
         try {
@@ -304,7 +301,7 @@ public class EightPuzzle {
             for (int i = 1; i <= line; i++) {
                 strPuzzle = br.readLine();
                 if (strPuzzle.contains("Depth")) {
-                    line++;
+                    strPuzzle = br.readLine();
                 }
             }
 
@@ -391,15 +388,17 @@ public class EightPuzzle {
         System.out.println();
 
 
-        System.out.println("Checking puzzle reader: ");
-        int[] puzzo = test.fileReader("puzzles.txt", 1);
+        System.out.println("Checking file reader: ");
+        int[] puzzo = fileReader("puzzles.txt", 920);
         for (int num: puzzo) {
             System.out.print(num + " ");
         }
         System.out.println();
+        test = new EightPuzzle(puzzo);
+
 
         System.out.println("Checking A*");
-        AStar aTest = new AStar(test, false);
+        AStar aTest = new AStar(test, true);
         System.out.println("depth: " + aTest.getDepth());
         System.out.println("cost: " + aTest.getCost());
 
