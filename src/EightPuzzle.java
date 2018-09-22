@@ -10,10 +10,20 @@ import java.io.IOException;
 // Solution cost should be close to the table
 // Catch bad input
 public class EightPuzzle {
-    private int[] puzzle;
+    private final int[] puzzle;
 
     public EightPuzzle (int[] puzzle) {
         this.puzzle = puzzle;
+    }
+
+    public boolean isEqual(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof EightPuzzle)) {
+            return false;
+        }
+        return false;
     }
     public boolean isSolvable() {
         // Finding number of inversions
@@ -389,7 +399,7 @@ public class EightPuzzle {
 
 
         System.out.println("Checking file reader: ");
-        int[] puzzo = fileReader("puzzles.txt", 920);
+        int[] puzzo = fileReader("puzzles.txt", 206);
         for (int num: puzzo) {
             System.out.print(num + " ");
         }

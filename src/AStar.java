@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Comparator;
 
@@ -7,13 +6,17 @@ public class AStar {
     private int depth = 0;
     private int cost = 0;
 
-    // TODO: Get average runtime
+    public int minMoves() {
+
+        return  -1;
+    }
+    // TODO: Get average runtime, make it work for depth >= 6, add previous node
     public AStar(EightPuzzle initialPuzzle, boolean useHamming) {
         PriorityQueue<EightPuzzle> openSet = null;
         if (useHamming) {
-            openSet = new PriorityQueue<EightPuzzle>(11, Comparator.comparing(EightPuzzle::hammingH1));
+            openSet = new PriorityQueue<EightPuzzle>(1000, Comparator.comparing(EightPuzzle::hammingH1));
         } else {
-            openSet = new PriorityQueue<EightPuzzle>(11, Comparator.comparing(EightPuzzle::manhattanH2));
+            openSet = new PriorityQueue<EightPuzzle>(1000, Comparator.comparing(EightPuzzle::manhattanH2));
         }
 
         ArrayList<EightPuzzle> closedSet = new ArrayList<EightPuzzle>();
@@ -23,6 +26,16 @@ public class AStar {
         if (initialPuzzle.isSolvable()) {
             while (!openSet.isEmpty()) {
                 current = openSet.peek();
+                if (current.isSolved()) {
+//Debugging
+//                    for (int num : current.puzzle) {
+//                        System.out.print(num + " ");
+//                    }
+//                    System.out.println();
+
+                    System.out.println("The puzzle is solved: ");
+                    break;
+                }
                 openSet.remove(current);
                 closedSet.add(current);
                 for (EightPuzzle neighbor : current.neighboringBoards()) {
@@ -34,16 +47,6 @@ public class AStar {
                     if (!openSet.contains(neighbor)) {
                         openSet.add(neighbor);
                     }
-                }
-                if (current.isSolved()) {
-//Debugging
-//                    for (int num : current.puzzle) {
-//                        System.out.print(num + " ");
-//                    }
-//                    System.out.println();
-
-                    System.out.println("The puzzle is solved: ");
-                    break;
                 }
                 depth++;
             }
