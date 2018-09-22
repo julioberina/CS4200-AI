@@ -2,7 +2,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 // NOTE: When applying h1 and h2 they should both have the same solution depth
 // Solution cost should be close to the table
@@ -10,8 +12,7 @@ import java.util.List;
 // h2 should be worse than h1
 // Can use graph search w/h2
 public class EightPuzzle {
-    // TODO: change back to private
-    public int[] puzzle;
+    private int[] puzzle;
 
     public EightPuzzle (int[] puzzle) {
         this.puzzle = puzzle;
@@ -51,7 +52,7 @@ public class EightPuzzle {
         return true;
     }
 
-    public int getTileAt(int location) {
+    private int getTileAt(int location) {
         return puzzle[location];
     }
 
@@ -82,31 +83,6 @@ public class EightPuzzle {
        }
        shufflePuzzle(generatedPuzzle);
        return generatedPuzzle;
-    }
-
-    // Might not use
-    private static int[][] generatePuzzles(int numberOfPuzzles) {
-        int[][] generatedPuzzles = new int[numberOfPuzzles][9];
-        for (int i = 0; i < generatedPuzzles.length; i++) {
-            for (int j = 0; j < generatedPuzzles[i].length; j++) {
-                generatedPuzzles[i][j] = j;
-            }
-            shufflePuzzle(generatedPuzzles[i]);
-// Debugging
-//            System.out.println("Preshuffled");
-//            for (int num : generatedPuzzles[i]) {
-//                System.out.print(num + " ");
-//            }
-//
-//            System.out.println();
-//            System.out.println("Shuffled");
-//            for (int num : generatedPuzzles[i]) {
-//                System.out.print(num + " ");
-//            }
-//            System.out.println("\n\n");
-
-        }
-        return generatedPuzzles;
     }
 
     // Needs to be changed to have a column for average runtime, and number of cases with a specific depth
@@ -144,6 +120,7 @@ public class EightPuzzle {
         return hamming;
     }
 
+    // TODO: Optimization: Change method to work with 1d array
     public int manhattanH2() {
         int[][] puzzle2d = convertTo2D(puzzle);
 
@@ -316,11 +293,40 @@ public class EightPuzzle {
     }
 
     // TODO: Get total number of lines in file, read in all lines skipping depth info
-    private int [][] fileReader(String fileName) {
-        int numOfLines = 0;
-        int[][] readPuzzles = new int[numOfLines][9];
+    private int [] fileReader(String fileName, int line) {
+        BufferedReader br = null;
+        FileReader fr = null;
+        try {
+            fr = new FileReader(fileName);
+            br = new BufferedReader(fr);
 
-        return readPuzzles;
+            String strPuzzle = null;
+            for (int i = 1; i <= line; i++) {
+                strPuzzle = br.readLine();
+                if (strPuzzle.contains("Depth")) {
+                    line++;
+                }
+            }
+
+            String[] nums = strPuzzle.split(" ");
+            int[] readPuzzle = new int[nums.length];
+            for(int i = 0; i < nums.length; i++) {
+                readPuzzle[i] = Integer.parseInt(nums[i]);
+            }
+            return readPuzzle;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null)
+                    br.close();
+                if (fr != null)
+                    fr.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public static void main(String [] args) {
@@ -332,7 +338,7 @@ public class EightPuzzle {
         int[] testPuzzle2 = {1, 2, 5, 3, 0, 4, 6, 7, 8};
 
 
-                EightPuzzle test = new EightPuzzle(testPuzzle2);
+        EightPuzzle test = new EightPuzzle(testPuzzle2);
 
         System.out.println("Checking if solvable");
         System.out.println(test.isSolvable());
@@ -347,7 +353,6 @@ public class EightPuzzle {
         System.out.println();
 
         // Testing puzzle generator
-        int[][] testPuzzles = generatePuzzles(100);
         int[] testGeneratedPuzzle = generatePuzzle();
 
         for (int num : testGeneratedPuzzle) {
@@ -386,10 +391,17 @@ public class EightPuzzle {
         System.out.println();
 
 
+        System.out.println("Checking puzzle reader: ");
+        int[] puzzo = test.fileReader("puzzles.txt", 1);
+        for (int num: puzzo) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+
         System.out.println("Checking A*");
         AStar aTest = new AStar(test, false);
-        System.out.println("depth: " + aTest.depth);
-        System.out.println("cost: " + aTest.cost);
+        System.out.println("depth: " + aTest.getDepth());
+        System.out.println("cost: " + aTest.getCost());
 
     }
 

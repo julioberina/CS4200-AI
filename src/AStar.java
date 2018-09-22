@@ -4,12 +4,10 @@ import java.util.PriorityQueue;
 import java.util.Comparator;
 
 public class AStar {
-    private EightPuzzle initialPuzzle;
-    // TODO: change back to public after private
-    public int depth = 0;
-    public int cost = 0;
+    private int depth = 0;
+    private int cost = 0;
 
-    // If hamming is false, then do manhattan
+    // TODO: Get average runtime
     public AStar(EightPuzzle initialPuzzle, boolean useHamming) {
         PriorityQueue<EightPuzzle> openSet = null;
         if (useHamming) {
@@ -27,7 +25,7 @@ public class AStar {
                 current = openSet.peek();
                 openSet.remove(current);
                 closedSet.add(current);
-                for (EightPuzzle neighbor: current.neighboringBoards()) {
+                for (EightPuzzle neighbor : current.neighboringBoards()) {
                     // number of nodes generated
                     cost++;
                     if (closedSet.contains(neighbor)) {
@@ -39,12 +37,12 @@ public class AStar {
                 }
                 if (current.isSolved()) {
 //Debugging
-                    System.out.println("The puzzle is solved: ");
-                    for (int num: current.puzzle) {
-                        System.out.print(num + " ");
-                    }
-                    System.out.println();
+//                    for (int num : current.puzzle) {
+//                        System.out.print(num + " ");
+//                    }
+//                    System.out.println();
 
+                    System.out.println("The puzzle is solved: ");
                     break;
                 }
                 depth++;
@@ -73,20 +71,12 @@ public class AStar {
         return sequence;
     }
 
-    public int solutionDepth() {
-        return depth++;
+    public int getDepth() {
+        return depth;
     }
 
-    public int solutionCost(EightPuzzle puzzles) {
-        for (EightPuzzle puzzle: puzzles.neighboringBoards()) {
-            cost++;
-        }
+    public int getCost() {
         return cost;
     }
-
-    public HashMap<Integer, ArrayList<Integer>> eightPuzzleSolver() {
-
-        HashMap<Integer, ArrayList<Integer>> solutionDepAndSearchCost = new HashMap<Integer, ArrayList<Integer>>();
-        return solutionDepAndSearchCost;
-    }
 }
+
