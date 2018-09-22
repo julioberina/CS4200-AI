@@ -10,7 +10,8 @@ import java.util.List;
 // h2 should be worse than h1
 // Can use graph search w/h2
 public class EightPuzzle {
-    private int[] puzzle;
+    // TODO: change back to private
+    public int[] puzzle;
 
     public EightPuzzle (int[] puzzle) {
         this.puzzle = puzzle;
@@ -189,7 +190,7 @@ public class EightPuzzle {
     }
 
     public Iterable<EightPuzzle> neighboringBoards() {
-        List<EightPuzzle> neighbors = new ArrayList<EightPuzzle>();
+        ArrayList<EightPuzzle> neighbors = new ArrayList<EightPuzzle>();
         // Convert to 2d array, find location of 0, generate a list of neighboring boards based off that pos
         int locationOfZero = 0;
         for (int i = 0; i < puzzle.length; i++) {
@@ -198,11 +199,11 @@ public class EightPuzzle {
             }
         }
 
-        System.out.println("Orig Puzzle: ");
-        for (int num: puzzle) {
-            System.out.print(num + " ");
-        }
-        System.out.println();
+//        System.out.println("Orig Puzzle: ");
+//        for (int num: puzzle) {
+//            System.out.print(num + " ");
+//        }
+//        System.out.println();
 
         EightPuzzle neighborPuzzle;
         int neighborArray[];
@@ -270,8 +271,8 @@ public class EightPuzzle {
                 neighborArray = swapTiles(locationOfZero, i);
                 neighborPuzzle = new EightPuzzle(neighborArray);
                 neighbors.add(neighborPuzzle);
-                return neighbors;
             }
+            return neighbors;
         }
         // middle left
         if (locationOfZero == 3) {
@@ -280,9 +281,9 @@ public class EightPuzzle {
                     neighborArray = swapTiles(locationOfZero, i);
                     neighborPuzzle = new EightPuzzle(neighborArray);
                     neighbors.add(neighborPuzzle);
-                    return neighbors;
                 }
             }
+            return neighbors;
         }
         //middle right
         if (locationOfZero == 5) {
@@ -291,9 +292,9 @@ public class EightPuzzle {
                     neighborArray = swapTiles(locationOfZero, i);
                     neighborPuzzle = new EightPuzzle(neighborArray);
                     neighbors.add(neighborPuzzle);
-                    return neighbors;
                 }
             }
+            return neighbors;
         }
         // bottom middle
         if (locationOfZero == 7) {
@@ -301,15 +302,15 @@ public class EightPuzzle {
                 neighborArray = swapTiles(locationOfZero, i);
                 neighborPuzzle = new EightPuzzle(neighborArray);
                 neighbors.add(neighborPuzzle);
-                return neighbors;
             }
+            return neighbors;
         }
 
-        System.out.println("Orig Puzzle after swapping: ");
-        for (int num: puzzle) {
-            System.out.print(num + " ");
-        }
-        System.out.println();
+//        System.out.println("Orig Puzzle after swapping: ");
+//        for (int num: puzzle) {
+//            System.out.print(num + " ");
+//        }
+//        System.out.println();
 
         return null;
     }
@@ -324,11 +325,14 @@ public class EightPuzzle {
 
     public static void main(String [] args) {
         int[] testPuzzle = {3, 1, 2, 6, 4, 5, 0, 7, 8};
-        int[] testPuzzle1 = {3, 1,  2, 4, 0, 5, 6, 7, 8};
-        int[] testPuzzled20 = {0, 5, 8, 2, 7, 6, 1, 3, 4};
+        int[] testPuzzle1 = {3, 1,  2, 4, 0, 5, 6, 7,8};
+        int[] testPuzzle20 = {0, 5, 8, 2, 7, 6, 1, 3, 4};
         int[] testPuzzle3 = {7, 2, 4, 5, 0, 6, 8, 3, 1};
         int[] solvedPuzzle = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-        EightPuzzle test = new EightPuzzle(testPuzzle3);
+        int[] testPuzzle2 = {1, 2, 5, 3, 0, 4, 6, 7, 8};
+
+
+                EightPuzzle test = new EightPuzzle(testPuzzle2);
 
         System.out.println("Checking if solvable");
         System.out.println(test.isSolvable());
@@ -372,7 +376,21 @@ public class EightPuzzle {
 
 
         System.out.println("Checking neighbors method");
-        test.neighboringBoards();
+        for (EightPuzzle puzzle: test.neighboringBoards()) {
+            int[] a = puzzle.puzzle;
+            for (int num : a) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+
+        System.out.println("Checking A*");
+        AStar aTest = new AStar(test, false);
+        System.out.println("depth: " + aTest.depth);
+        System.out.println("cost: " + aTest.cost);
+
     }
 
 }
