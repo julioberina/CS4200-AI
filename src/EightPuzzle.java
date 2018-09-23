@@ -433,7 +433,7 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
 
 
         System.out.println("Checking file reader: ");
-        int[] puzzo = fileReader("puzzles.txt", 906);
+        int[] puzzo = fileReader("puzzles.txt", 907);
         for (int num: puzzo) {
             System.out.print(num + " ");
         }
@@ -442,9 +442,9 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
 
 
         System.out.println("Checking A*");
-        AStar aTest = new AStar(puzzo, true);
+        AStar aTest = new AStar(puzzo, false);
         System.out.println("depth: " + aTest.getDepth());
-        System.out.println("cost: " + aTest.getCost());
+        System.out.println("cost/depth: " + test.stepCost);
 
     }
 

@@ -24,7 +24,6 @@ public class AStar {
 
                 if (!current.isSolved()) {
                     for (EightPuzzle neighbor : current.neighboringBoards()) {
-                    cost++;
                     // number of nodes generated
                     if (!closedSet.contains(neighbor)) {
                         int heursticVal;
@@ -34,8 +33,8 @@ public class AStar {
                             heursticVal = neighbor.manhattanH2();
                         }
 
-                        openSet.add(new EightPuzzle(neighbor.getPuzzle(), cost, heursticVal, current));
-                        System.out.println("Step cost: " + neighbor.stepCost);
+                        openSet.add(new EightPuzzle(neighbor.getPuzzle(), current.stepCost + 1, heursticVal, current));
+                        System.out.println("Step cost: " + current.stepCost);
                         }
 
                         for (int num : current.getPuzzle()) {
@@ -46,14 +45,8 @@ public class AStar {
 //Debugging
 
                 } else {
-                    System.out.println("The puzzle is solved: ");
-                    for (int num : current.getPuzzle()) {
-                        System.out.print(num + " ");
-                    }
-                    System.out.println();
                     openSet.clear();
                 }
-
             }
 
 
