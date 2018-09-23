@@ -5,6 +5,7 @@ import java.util.Random;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 // Catch bad input
 public class EightPuzzle implements Comparable<EightPuzzle>{
@@ -354,27 +355,180 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         }
     }
 
-    public static void main(String [] args) {
-        int[] ugh = {3, 2, 7, 1, 8, 4, 5, 6, 0};
-        EightPuzzle test;
-        AStar aTest;
-
-        // debuggo
-        int startRange = 920;
-        int endRange = 1019;
-        for (int i = startRange; i <= endRange; i++) {
-            int[] testPuzzle = fileReader("puzzles.txt", i);
-            if (testPuzzle != null) {
-                System.out.println("Puzzle at line: " + i);
-
-                System.out.println("Using hamming:" );
-                new AStar(testPuzzle, true);
-
-                System.out.println("Using man:" );
-                new AStar(testPuzzle, false);
-                System.out.print("\n\n");
+    public static void print2dArray(int[][] a) {
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a[i].length; j++) {
+                System.out.print(a[i][j] + " ");
             }
+            System.out.println();
         }
     }
 
+
+    public static void printOutput(Iterable<EightPuzzle> optimalSequence, int depth, int searchCost) {
+        if (searchCost != 0) {
+            System.out.println("Optimal sequence: ");
+            for (EightPuzzle puzzle: optimalSequence) {
+                int[] a = puzzle.getPuzzle();
+                print2dArray(convertTo2D(a));
+                System.out.print("\n\n");
+            }
+
+            System.out.print("Solution depth: " + depth);
+            System.out.println();
+            System.out.print("Solution cost: " + searchCost);
+            System.out.println();
+        }
+    }
+
+    public static void main(String [] args) {
+        EightPuzzle puzzle;
+        AStar solver;
+
+        System.out.println("Three sample solutions: ");
+        int[] sample1 = {3, 2, 7, 1, 8, 4, 5, 6, 0};
+        int[] sample2 = {0, 1, 2, 3, 5, 4, 6, 8, 7};
+        int[] sample3 = {0, 1 , 3, 4, 2, 5, 7, 8, 6};
+
+        System.out.println("Sample 1: ");
+        solver = new AStar(sample1, true);
+        System.out.println("Using Hamming");
+        printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+        System.out.println();
+
+        solver = new AStar(sample1, false);
+        System.out.println("Using Manhattan");
+        printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+        System.out.println("\n");
+
+
+        System.out.println("Sample 2: ");
+        solver = new AStar(sample2, true);
+        System.out.println("Using Hamming");
+        printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+        System.out.println();
+
+        solver = new AStar(sample2, false);
+        System.out.println("Using Manhattan");
+        printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+        System.out.println("\n");
+
+
+        System.out.println("Sample 3: ");
+        solver = new AStar(sample3, true);
+        System.out.println("Using Hamming");
+        printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+        System.out.println();
+
+        solver = new AStar(sample3, false);
+        System.out.println("Using Manhattan");
+        printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+        System.out.println("\n");
+
+
+        int[] board;
+        Scanner keyboard = new Scanner(System.in);
+        int choice = 0;
+        while (choice != 4) {
+            System.out.println("\nSelect an option:");
+            choice = keyboard.nextInt();
+            switch (choice) {
+                case 1:
+                    do {
+                        board = generatePuzzle();
+                        puzzle = new EightPuzzle(board);
+                    } while (!puzzle.isSolvable());
+
+                    System.out.println("Generated Puzzle: ");
+                    print2dArray(convertTo2D(board));
+                    System.out.println();
+
+                    solver = new AStar(board, true);
+                    System.out.println("Using Hamming");
+                    printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+
+                    solver = new AStar(board, false);
+                    System.out.println("Using Manhattan");
+                    printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                    break;
+
+                case 2:
+                    System.out.println("Enter a puzzle: ");
+                    keyboard.nextLine();
+                    String userPuzzle = keyboard.nextLine();
+
+                    if (userPuzzle != null) {
+                        String[] nums = userPuzzle.split(" ");
+                        if (nums.length < 9) {
+                            System.out.println("Incorrect format");
+                        } else {
+                            int[] readPuzzle = new int[nums.length];
+                            for (int i = 0; i < nums.length; i++) {
+                                try {
+                                    readPuzzle[i] = Integer.parseInt(nums[i]);
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Expected ints, got something else");
+                                    for (i = 0; i < nums.length; i++) {
+                                        readPuzzle[i] = i;
+                                    }
+                                    break;
+                                }
+                            }
+
+                            puzzle = new EightPuzzle(readPuzzle);
+                            if (!puzzle.isSolvable()) {
+                                System.out.println("Not a valid puzzle");
+                            } else {
+                                System.out.println("User puzzle: ");
+                                print2dArray(convertTo2D(readPuzzle));
+                                System.out.println();
+
+                                solver = new AStar(readPuzzle, true);
+                                System.out.println("Using Hamming");
+                                printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+
+                                solver = new AStar(readPuzzle, false);
+                                System.out.println("Using Manhattan");
+                                printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                            }
+                        }
+                    } else {
+                        System.out.println("Not a valid puzzle");
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Generating 500 test cases: ");
+                    break;
+
+                case 4:
+                    System.out.println("Exiting....");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice....");
+                    break;
+
+
+            }
+
+            // debuggo
+//        int startRange = 920;
+//        int endRange = 1019;
+//        for (int i = startRange; i <= endRange; i++) {
+//            int[] testPuzzle = fileReader("puzzles.txt", i);
+//            if (testPuzzle != null) {
+//                System.out.println("Puzzle at line: " + i);
+//
+//                System.out.println("Using hamming:" );
+//                new AStar(testPuzzle, true);
+//
+//                System.out.println("Using man:" );
+//                new AStar(testPuzzle, false);
+//                System.out.print("\n\n");
+//            }
+//        }
+        }
+
+    }
 }
