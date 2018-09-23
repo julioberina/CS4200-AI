@@ -23,10 +23,17 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         this.previousPuzzle = previousPuzzle;
     }
 
+    public int incrementStepCost() {
+        this.stepCost++;
+        return stepCost;
+    }
+
     public EightPuzzle(int[] currentPuzzle) {
         this.currentPuzzle = currentPuzzle;
     }
 
+    // Critical optimization recommended by:
+    // http://www.cs.princeton.edu/courses/archive/spr18/cos226/assignments/8puzzle/index.html
     public boolean equals(Object o) {
         if (o == this) {
             return true;
@@ -310,7 +317,7 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         }
         // bottom middle
         if (locationOfZero == 7) {
-            for (int i = 3; i <= 7; i = i + 2) {
+            for (int i = 4; i <= 8; i = i + 2) {
                 neighborArray = swapTiles(locationOfZero, i);
                 neighborPuzzle = new EightPuzzle(neighborArray);
                 neighbors.add(neighborPuzzle);
@@ -381,6 +388,7 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
     }
 
     public static void main(String [] args) {
+        int[] ugh = {3, 2, 7, 1, 8, 4, 5, 6, 0};
         EightPuzzle test;
         AStar aTest;
 
@@ -394,17 +402,28 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
 //        aTest = new AStar(puzzo, true);
 
         // debuggo
-        int startRange = 205;
-        int endRange = 305;
+        int startRange = 923;
+        int endRange = 923;
         for (int i = startRange; i <= endRange; i++) {
             int[] testPuzzle = fileReader("puzzles.txt", i);
             if (testPuzzle != null) {
                 System.out.println("Puzzle at line: " + i);
+
+                System.out.println("Using hamming:" );
                 new AStar(testPuzzle, true);
+
+                System.out.println("Using man:" );
+                new AStar(testPuzzle, false);
                 System.out.print("\n\n");
             }
         }
 
+        System.out.println("Using hamming:" );
+        new AStar(ugh, true);
+
+        System.out.println("Using man:" );
+        new AStar(ugh, false);
+        System.out.print("\n\n");
     }
 
 }

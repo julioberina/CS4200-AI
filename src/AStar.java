@@ -3,10 +3,6 @@ import java.util.*;
 public class AStar {
     private int cost;
 
-    public int minMoves() {
-
-        return  -1;
-    }
     // TODO: Get average runtime, make it work for depth >= 6, add previous node
     public AStar(int[] initialState, boolean useHamming) {
         PriorityQueue<EightPuzzle> openSet = new PriorityQueue<EightPuzzle>();
@@ -31,6 +27,7 @@ public class AStar {
                         }
                         if (!neighbor.equals(current.getPreviousPuzzle()))
                         openSet.add(new EightPuzzle(neighbor.getPuzzle(), current.stepCost + 1, heursticVal, current));
+                        //System.out.println("Step cost: " + current.stepCost);
                         }
 //Debugging
 //                        for (int num : current.getPuzzle()) {
@@ -67,14 +64,14 @@ public class AStar {
         }
         optimalSequence(optimalPath);
 //Debugging -- i wanna die lol
-//        for (EightPuzzle puzzle: optimalPath) {
-//            int[] a = puzzle.getPuzzle();
-//            for (int num : a)
-//                System.out.print(num + " ");
-//            }
-//            System.out.println();
-//        }
-//        System.out.println();
+        for (EightPuzzle puzzle: optimalPath) {
+            int[] a = puzzle.getPuzzle();
+            for (int num : a)
+                System.out.print(num + " ");
+                System.out.println();
+            }
+
+        System.out.println();
         System.out.println("searchCost (nodes generated): " + closedSet.size());
         cost = closedSet.size();
         System.out.println("Depth: " + (optimalPath.size() - 1));
