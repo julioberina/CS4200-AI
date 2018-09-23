@@ -9,31 +9,51 @@ import java.io.IOException;
 // NOTE: When applying h1 and h2 they should both have the same solution depth
 // Solution cost should be close to the table
 // Catch bad input
-public class EightPuzzle {
-    private final int[] puzzle;
+public class EightPuzzle implements Comparable<EightPuzzle>{
+    // TODO: Change back to private
+    private final int[] currentPuzzle;
+    public int stepCost;
+    public int estimatedCost;
+    private EightPuzzle previousPuzzle;
 
-    public EightPuzzle (int[] puzzle) {
-        this.puzzle = puzzle;
+    public EightPuzzle (int[] currentPuzzle, int stepCost, int estimatedCost, EightPuzzle previousPuzzle) {
+        this.currentPuzzle = currentPuzzle;
+        this.stepCost = stepCost;
+        this.estimatedCost = estimatedCost;
+        this.previousPuzzle = previousPuzzle;
     }
 
-    public boolean isEqual(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof EightPuzzle)) {
-            return false;
-        }
-        return false;
+    public EightPuzzle(int[] currentPuzzle) {
+        this.currentPuzzle = currentPuzzle;
     }
+
+    public int[] getPuzzle() {
+        return currentPuzzle;
+    }
+
+    public EightPuzzle getPreviousPuzzle() {
+        return previousPuzzle;
+    }
+
+
+    public int setStepCost() {
+
+        return -1;
+    }
+
+    public void setEstimatedCost(int estimatedCost) {
+        this.estimatedCost = estimatedCost;
+    }
+
     public boolean isSolvable() {
         // Finding number of inversions
         int numberOfInversions = 0;
-        for (int i = 0; i < puzzle.length; i++) {
+        for (int i = 0; i < currentPuzzle.length; i++) {
             if (i + 1 >= 9) {
                 break;
             }
-            if (puzzle[i] < puzzle[i + 1]) {
-//                System.out.println("1st:" + puzzle[i] + ", 2nd: " + puzzle[i + 1]);
+            if (currentPuzzle[i] < currentPuzzle[i + 1]) {
+//                System.out.println("1st:" + currentPuzzle[i] + ", 2nd: " + currentPuzzle[i + 1]);
                 numberOfInversions += 1;
             }
         }
@@ -52,8 +72,8 @@ public class EightPuzzle {
     }
 
     public boolean isSolved() {
-        for (int i = 0; i < puzzle.length; i++) {
-            if (i != puzzle[i]) {
+        for (int i = 0; i < currentPuzzle.length; i++) {
+            if (i != currentPuzzle[i]) {
                 return false;
             }
         }
@@ -61,11 +81,11 @@ public class EightPuzzle {
     }
 
     private int getTileAt(int location) {
-        return puzzle[location];
+        return currentPuzzle[location];
     }
 
     private int[] swapTiles(int location1, int location2) {
-        int[] tempPuzzle = puzzle.clone();
+        int[] tempPuzzle = currentPuzzle.clone();
         int temp = tempPuzzle[location1];
         tempPuzzle[location1] = tempPuzzle[location2];
         tempPuzzle[location2] = temp;
@@ -120,8 +140,8 @@ public class EightPuzzle {
 
     public int hammingH1() {
         int hamming = 0;
-        for (int i = 0; i < puzzle.length; i++) {
-            if (puzzle[i] != i && puzzle[i] != 0) {
+        for (int i = 0; i < currentPuzzle.length; i++) {
+            if (currentPuzzle[i] != i && currentPuzzle[i] != 0) {
                 hamming += 1;
             }
         }
@@ -130,7 +150,7 @@ public class EightPuzzle {
 
     // TODO: Optimization: Change method to work with 1d array
     public int manhattanH2() {
-        int[][] puzzle2d = convertTo2D(puzzle);
+        int[][] puzzle2d = convertTo2D(currentPuzzle);
 
         int num = 0;
         int sumOfManhattan = 0;
@@ -178,14 +198,14 @@ public class EightPuzzle {
         ArrayList<EightPuzzle> neighbors = new ArrayList<EightPuzzle>();
         // Convert to 2d array, find location of 0, generate a list of neighboring boards based off that pos
         int locationOfZero = 0;
-        for (int i = 0; i < puzzle.length; i++) {
-            if (puzzle[i] == 0) {
+        for (int i = 0; i < currentPuzzle.length; i++) {
+            if (currentPuzzle[i] == 0) {
                 locationOfZero = i;
             }
         }
 
 //        System.out.println("Orig Puzzle: ");
-//        for (int num: puzzle) {
+//        for (int num: currentPuzzle) {
 //            System.out.print(num + " ");
 //        }
 //        System.out.println();
@@ -292,7 +312,7 @@ public class EightPuzzle {
         }
 
 //        System.out.println("Orig Puzzle after swapping: ");
-//        for (int num: puzzle) {
+//        for (int num: currentPuzzle) {
 //            System.out.print(num + " ");
 //        }
 //        System.out.println();
@@ -334,6 +354,20 @@ public class EightPuzzle {
             }
         }
         return null;
+    }
+
+    @Override
+    public int compareTo(EightPuzzle o) {
+        int priority1 = stepCost + estimatedCost;
+        int priority2 = o.stepCost + o.estimatedCost;
+
+        if (priority1 < priority2) {
+            return -1;
+        } else if (priority1 > priority2) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public static void main(String [] args) {
@@ -389,7 +423,7 @@ public class EightPuzzle {
 
         System.out.println("Checking neighbors method");
         for (EightPuzzle puzzle: test.neighboringBoards()) {
-            int[] a = puzzle.puzzle;
+            int[] a = puzzle.currentPuzzle;
             for (int num : a) {
                 System.out.print(num + " ");
             }
@@ -399,7 +433,7 @@ public class EightPuzzle {
 
 
         System.out.println("Checking file reader: ");
-        int[] puzzo = fileReader("puzzles.txt", 206);
+        int[] puzzo = fileReader("puzzles.txt", 906);
         for (int num: puzzo) {
             System.out.print(num + " ");
         }
@@ -408,7 +442,7 @@ public class EightPuzzle {
 
 
         System.out.println("Checking A*");
-        AStar aTest = new AStar(test, true);
+        AStar aTest = new AStar(puzzo, true);
         System.out.println("depth: " + aTest.getDepth());
         System.out.println("cost: " + aTest.getCost());
 

@@ -1,55 +1,63 @@
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Comparator;
+import java.util.*;
 
 public class AStar {
     private int depth = 0;
     private int cost = 0;
+
 
     public int minMoves() {
 
         return  -1;
     }
     // TODO: Get average runtime, make it work for depth >= 6, add previous node
-    public AStar(EightPuzzle initialPuzzle, boolean useHamming) {
-        PriorityQueue<EightPuzzle> openSet = null;
-        if (useHamming) {
-            openSet = new PriorityQueue<EightPuzzle>(1000, Comparator.comparing(EightPuzzle::hammingH1));
-        } else {
-            openSet = new PriorityQueue<EightPuzzle>(1000, Comparator.comparing(EightPuzzle::manhattanH2));
-        }
+    public AStar(int[] initialState, boolean useHamming) {
+        PriorityQueue<EightPuzzle> openSet = new PriorityQueue<EightPuzzle>();
+        HashSet<EightPuzzle> closedSet = new HashSet<>();
 
-        ArrayList<EightPuzzle> closedSet = new ArrayList<EightPuzzle>();
+        EightPuzzle initialPuzzle = new EightPuzzle(initialState, 0, 0, null);
         openSet.add(initialPuzzle);
-
-        EightPuzzle current;
+        EightPuzzle current = null;
         if (initialPuzzle.isSolvable()) {
             while (!openSet.isEmpty()) {
-                current = openSet.peek();
-                if (current.isSolved()) {
-//Debugging
-//                    for (int num : current.puzzle) {
-//                        System.out.print(num + " ");
-//                    }
-//                    System.out.println();
-
-                    System.out.println("The puzzle is solved: ");
-                    break;
-                }
-                openSet.remove(current);
+                current = openSet.remove();
                 closedSet.add(current);
-                for (EightPuzzle neighbor : current.neighboringBoards()) {
-                    // number of nodes generated
+
+                if (!current.isSolved()) {
+                    for (EightPuzzle neighbor : current.neighboringBoards()) {
                     cost++;
-                    if (closedSet.contains(neighbor)) {
-                        continue;
+                    // number of nodes generated
+                    if (!closedSet.contains(neighbor)) {
+                        int heursticVal;
+                        if (useHamming) {
+                            heursticVal = neighbor.hammingH1();
+                        } else {
+                            heursticVal = neighbor.manhattanH2();
+                        }
+
+                        openSet.add(new EightPuzzle(neighbor.getPuzzle(), cost, heursticVal, current));
+                        System.out.println("Step cost: " + neighbor.stepCost);
+                        }
+
+                        for (int num : current.getPuzzle()) {
+                            System.out.print(num + " ");
+                        }
+                        System.out.println();
                     }
-                    if (!openSet.contains(neighbor)) {
-                        openSet.add(neighbor);
+//Debugging
+
+                } else {
+                    System.out.println("The puzzle is solved: ");
+                    for (int num : current.getPuzzle()) {
+                        System.out.print(num + " ");
                     }
+                    System.out.println();
+                    openSet.clear();
                 }
-                depth++;
+
             }
+
+
+
 // Debugging
 //            System.out.println("openSet size: " + openSet.size());
 //            for (EightPuzzle puzzle: openSet) {
@@ -64,13 +72,29 @@ public class AStar {
             System.out.println("This puzzle is not solvable");
         }
 
+        ArrayList<EightPuzzle> optimalPath = new ArrayList<>();
+        while (current != null) {
+            optimalPath.add(current);
+            current = current.getPreviousPuzzle();
+        }
+        optimalSequence(optimalPath);
+//Debugging -- i wanna die lol
+        for (EightPuzzle puzzle: optimalPath) {
+            int[] a = puzzle.getPuzzle();
+            for (int num : a) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println("closedSet size: " + closedSet.size());
+        System.out.println("openSetSize: " + openSet.size());
 
         // this.initialPuzzle = initialPuzzle;
     }
 
-    public Iterable<EightPuzzle> optimalSequence() {
-        ArrayList<EightPuzzle> sequence = new ArrayList<EightPuzzle>();
-
+    public Iterable<EightPuzzle> optimalSequence(ArrayList<EightPuzzle> sequence) {
+        Collections.reverse(sequence);
         return sequence;
     }
 
