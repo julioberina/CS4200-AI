@@ -6,11 +6,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-// NOTE: When applying h1 and h2 they should both have the same solution depth
-// Solution cost should be close to the table
 // Catch bad input
 public class EightPuzzle implements Comparable<EightPuzzle>{
-    // TODO: Change back to private
     private final int[] currentPuzzle;
     protected int stepCost;
     private int estimatedCost;
@@ -21,11 +18,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         this.stepCost = stepCost;
         this.estimatedCost = estimatedCost;
         this.previousPuzzle = previousPuzzle;
-    }
-
-    public int incrementStepCost() {
-        this.stepCost++;
-        return stepCost;
     }
 
     public EightPuzzle(int[] currentPuzzle) {
@@ -61,21 +53,15 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
     }
 
     public boolean isSolvable() {
-        // Finding number of inversions
         int numberOfInversions = 0;
         for (int i = 0; i < currentPuzzle.length; i++) {
             if (i + 1 >= 9) {
                 break;
             }
             if (currentPuzzle[i] < currentPuzzle[i + 1]) {
-//                System.out.println("1st:" + currentPuzzle[i] + ", 2nd: " + currentPuzzle[i + 1]);
                 numberOfInversions += 1;
             }
         }
-
-// Debugging
-//        System.out.println("Number of inversions: " + numberOfInversions);
-//        System.out.println("Parity: " + parity);
 
         int parity = numberOfInversions % 2;
         if (parity == 0) {
@@ -163,7 +149,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         return hamming;
     }
 
-    // TODO: Optimization: Change method to work with 1d array
     public int manhattanH2() {
         int[][] puzzle2d = convertTo2D(currentPuzzle);
 
@@ -218,12 +203,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
             }
         }
 
-//        System.out.println("Orig Puzzle: ");
-//        for (int num: currentPuzzle) {
-//            System.out.print(num + " ");
-//        }
-//        System.out.println();
-
         EightPuzzle neighborPuzzle;
         int neighborArray[];
         // If tile is in the middle ((1,1) in 2d array)
@@ -233,11 +212,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
                 neighborPuzzle = new EightPuzzle(neighborArray);
                 neighbors.add(neighborPuzzle);
             }
-//            System.out.println("array1: ");
-//            for (int num: array1) {
-//                System.out.print(num + " ");
-//            }
-//            System.out.println();
             return neighbors;
         }
         // top left corner
@@ -324,13 +298,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
             }
             return neighbors;
         }
-
-//        System.out.println("Orig Puzzle after swapping: ");
-//        for (int num: currentPuzzle) {
-//            System.out.print(num + " ");
-//        }
-//        System.out.println();
-
         return null;
     }
 
@@ -392,18 +359,9 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         EightPuzzle test;
         AStar aTest;
 
-        // valid for d = 4
-//        System.out.println("Checking file reader: ");
-//        int[] puzzo = fileReader("puzzles.txt", 3);
-//        for (int num: puzzo) {
-//            System.out.print(num + " ");
-//        }
-//        System.out.println();
-//        aTest = new AStar(puzzo, true);
-
         // debuggo
-        int startRange = 923;
-        int endRange = 923;
+        int startRange = 920;
+        int endRange = 1019;
         for (int i = startRange; i <= endRange; i++) {
             int[] testPuzzle = fileReader("puzzles.txt", i);
             if (testPuzzle != null) {
@@ -417,13 +375,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
                 System.out.print("\n\n");
             }
         }
-
-        System.out.println("Using hamming:" );
-        new AStar(ugh, true);
-
-        System.out.println("Using man:" );
-        new AStar(ugh, false);
-        System.out.print("\n\n");
     }
 
 }
