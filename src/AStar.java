@@ -1,9 +1,7 @@
 import java.util.*;
 
 public class AStar {
-    private int depth = 0;
-    private int cost = 0;
-
+    private int cost;
 
     public int minMoves() {
 
@@ -24,7 +22,6 @@ public class AStar {
 
                 if (!current.isSolved()) {
                     for (EightPuzzle neighbor : current.neighboringBoards()) {
-                    // number of nodes generated
                     if (!closedSet.contains(neighbor)) {
                         int heursticVal;
                         if (useHamming) {
@@ -32,17 +29,15 @@ public class AStar {
                         } else {
                             heursticVal = neighbor.manhattanH2();
                         }
-
+                        if (!neighbor.equals(current.getPreviousPuzzle()))
                         openSet.add(new EightPuzzle(neighbor.getPuzzle(), current.stepCost + 1, heursticVal, current));
-                        System.out.println("Step cost: " + current.stepCost);
                         }
-
-                        for (int num : current.getPuzzle()) {
-                            System.out.print(num + " ");
-                        }
-                        System.out.println();
-                    }
 //Debugging
+//                        for (int num : current.getPuzzle()) {
+//                            System.out.print(num + " ");
+//                        }
+//                        System.out.println();
+                    }
 
                 } else {
                     openSet.clear();
@@ -72,16 +67,19 @@ public class AStar {
         }
         optimalSequence(optimalPath);
 //Debugging -- i wanna die lol
-        for (EightPuzzle puzzle: optimalPath) {
-            int[] a = puzzle.getPuzzle();
-            for (int num : a) {
-                System.out.print(num + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        System.out.println("closedSet size: " + closedSet.size());
-        System.out.println("openSetSize: " + openSet.size());
+//        for (EightPuzzle puzzle: optimalPath) {
+//            int[] a = puzzle.getPuzzle();
+//            for (int num : a)
+//                System.out.print(num + " ");
+//            }
+//            System.out.println();
+//        }
+//        System.out.println();
+        System.out.println("searchCost (nodes generated): " + closedSet.size());
+        cost = closedSet.size();
+        System.out.println("Depth: " + (optimalPath.size() - 1));
+
+
 
         // this.initialPuzzle = initialPuzzle;
     }
@@ -91,12 +89,9 @@ public class AStar {
         return sequence;
     }
 
-    public int getDepth() {
-        return depth;
-    }
-
     public int getCost() {
         return cost;
     }
+
 }
 

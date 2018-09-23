@@ -12,8 +12,8 @@ import java.io.IOException;
 public class EightPuzzle implements Comparable<EightPuzzle>{
     // TODO: Change back to private
     private final int[] currentPuzzle;
-    public int stepCost;
-    public int estimatedCost;
+    protected int stepCost;
+    private int estimatedCost;
     private EightPuzzle previousPuzzle;
 
     public EightPuzzle (int[] currentPuzzle, int stepCost, int estimatedCost, EightPuzzle previousPuzzle) {
@@ -27,6 +27,19 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         this.currentPuzzle = currentPuzzle;
     }
 
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof EightPuzzle)) {
+            return false;
+        }
+
+        EightPuzzle that = (EightPuzzle) o;
+        return Arrays.deepEquals(new int[][]{this.currentPuzzle}, new int[][]{that.currentPuzzle});
+    }
+
     public int[] getPuzzle() {
         return currentPuzzle;
     }
@@ -35,11 +48,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         return previousPuzzle;
     }
 
-
-    public int setStepCost() {
-
-        return -1;
-    }
 
     public void setEstimatedCost(int estimatedCost) {
         this.estimatedCost = estimatedCost;
@@ -196,7 +204,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
 
     public Iterable<EightPuzzle> neighboringBoards() {
         ArrayList<EightPuzzle> neighbors = new ArrayList<EightPuzzle>();
-        // Convert to 2d array, find location of 0, generate a list of neighboring boards based off that pos
         int locationOfZero = 0;
         for (int i = 0; i < currentPuzzle.length; i++) {
             if (currentPuzzle[i] == 0) {
@@ -330,17 +337,20 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
             String strPuzzle = null;
             for (int i = 1; i <= line; i++) {
                 strPuzzle = br.readLine();
-                if (strPuzzle.contains("Depth")) {
-                    strPuzzle = br.readLine();
+                if (strPuzzle.contains("Depth") || strPuzzle.isEmpty()) {
+                    strPuzzle = null;
                 }
             }
 
-            String[] nums = strPuzzle.split(" ");
-            int[] readPuzzle = new int[nums.length];
-            for(int i = 0; i < nums.length; i++) {
-                readPuzzle[i] = Integer.parseInt(nums[i]);
+            if (strPuzzle != null) {
+                String[] nums = strPuzzle.split(" ");
+                int[] readPuzzle = new int[nums.length];
+                for(int i = 0; i < nums.length; i++) {
+                    readPuzzle[i] = Integer.parseInt(nums[i]);
+                }
+                return readPuzzle;
             }
-            return readPuzzle;
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -371,80 +381,29 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
     }
 
     public static void main(String [] args) {
-        int[] testPuzzle = {3, 1, 2, 6, 4, 5, 0, 7, 8};
-        int[] testPuzzle1 = {3, 1,  2, 4, 0, 5, 6, 7,8};
-        int[] testPuzzle20 = {0, 5, 8, 2, 7, 6, 1, 3, 4};
-        int[] testPuzzle3 = {7, 2, 4, 5, 0, 6, 8, 3, 1};
-        int[] solvedPuzzle = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-        int[] testPuzzle2 = {1, 2, 5, 3, 0, 4, 6, 7, 8};
+        EightPuzzle test;
+        AStar aTest;
 
+        // valid for d = 4
+//        System.out.println("Checking file reader: ");
+//        int[] puzzo = fileReader("puzzles.txt", 3);
+//        for (int num: puzzo) {
+//            System.out.print(num + " ");
+//        }
+//        System.out.println();
+//        aTest = new AStar(puzzo, true);
 
-        EightPuzzle test = new EightPuzzle(testPuzzle2);
-
-        System.out.println("Checking if solvable");
-        System.out.println(test.isSolvable());
-        System.out.println();
-
-        System.out.println("Checking if solved");
-        System.out.println(test.isSolved());
-        System.out.println();
-
-        System.out.println("Checking getTileAt");
-        System.out.println(test.getTileAt(4));
-        System.out.println();
-
-        // Testing puzzle generator
-        int[] testGeneratedPuzzle = generatePuzzle();
-
-        for (int num : testGeneratedPuzzle) {
-            System.out.print(num + " ");
-        }
-
-
-        // Testing printTable
-        System.out.println();
-        HashMap<Integer, ArrayList<Integer>> testMap = new HashMap<Integer, ArrayList<Integer>>();
-        ArrayList<Integer> testList= new ArrayList<Integer>(Arrays.asList(10, 20));
-        ArrayList<Integer> testList2 = new ArrayList<Integer>(Arrays.asList(30, 40));
-        testMap.put(2, testList);
-        testMap.put(4, testList);
-        testMap.put(6, testList);
-        testMap.put(5, testList);
-        test.printTable(testMap);
-        System.out.println();
-
-        System.out.println("Checking hamming");
-        System.out.println(test.hammingH1());
-
-        System.out.println("Checking manhattan");
-        System.out.println(test.manhattanH2());
-        System.out.println();
-
-
-        System.out.println("Checking neighbors method");
-        for (EightPuzzle puzzle: test.neighboringBoards()) {
-            int[] a = puzzle.currentPuzzle;
-            for (int num : a) {
-                System.out.print(num + " ");
+        // debuggo
+        int startRange = 205;
+        int endRange = 305;
+        for (int i = startRange; i <= endRange; i++) {
+            int[] testPuzzle = fileReader("puzzles.txt", i);
+            if (testPuzzle != null) {
+                System.out.println("Puzzle at line: " + i);
+                new AStar(testPuzzle, true);
+                System.out.print("\n\n");
             }
-            System.out.println();
         }
-        System.out.println();
-
-
-        System.out.println("Checking file reader: ");
-        int[] puzzo = fileReader("puzzles.txt", 907);
-        for (int num: puzzo) {
-            System.out.print(num + " ");
-        }
-        System.out.println();
-        test = new EightPuzzle(puzzo);
-
-
-        System.out.println("Checking A*");
-        AStar aTest = new AStar(puzzo, false);
-        System.out.println("depth: " + aTest.getDepth());
-        System.out.println("cost/depth: " + test.stepCost);
 
     }
 
