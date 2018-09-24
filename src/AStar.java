@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class AStar {
-    private int cost;
+    private double cost;
     private double time;
     private int depth;
     private ArrayList<EightPuzzle> optimalPath;
@@ -89,7 +89,7 @@ public class AStar {
         return optimalPath;
     }
 
-    public int getCost() {
+    public double getCost() {
         return cost;
     }
 
