@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 
 // Catch bad input
 public class EightPuzzle implements Comparable<EightPuzzle>{
@@ -48,11 +48,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         return previousPuzzle;
     }
 
-
-    public void setEstimatedCost(int estimatedCost) {
-        this.estimatedCost = estimatedCost;
-    }
-
     public boolean isSolvable() {
         int numberOfInversions = 0;
         for (int i = 0; i < currentPuzzle.length; i++) {
@@ -80,10 +75,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
             }
         }
         return true;
-    }
-
-    private int getTileAt(int location) {
-        return currentPuzzle[location];
     }
 
     // this function is the problem..too much memory generating puzzles
@@ -115,29 +106,28 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
        return generatedPuzzle;
     }
 
-    // Needs to be changed to have a column for average runtime, and number of cases with a specific depth
-    private void printTable(HashMap<Integer, ArrayList<Integer>> data) {
-        String leftAlignFormat = "| %-2d | %-6d | %-5d | %n";
-        System.out.format("+---+---------+-------+%n");
-        System.out.format("| d |   h1    |  h2   |%n");
-        System.out.format("+---+---------+-------+%n");
+    // Prints average of tests for certian depth
+    private static void printTable(HashMap<Integer, ArrayList<Integer>> data) {
+        String leftAlignFormat = "| %-2d | %-6d | %-5d | %-4d |%n";
+        System.out.format("+---+---------+-------+------+%n");
+        System.out.format("| d |   h1    |  h2   |numsT|   %n");
+        System.out.format("+---+---------+-------+------+%n");
 
         int i = 2;
-        while ((i / 2) < data.size()) {
+        while (i <= 24) {
             ArrayList<Integer> searchCostList;
             if (data.containsKey(i)) {
                 searchCostList = data.get(i);
-                int h1 = searchCostList.get(0);
-                int h2 = searchCostList.get(1);
+                int numOfTests = searchCostList.get(2);
+                int h1Average = searchCostList.get(0) / numOfTests;
+                int h2Average = searchCostList.get(1) / numOfTests;
 
-                System.out.format(leftAlignFormat, i , h1, h2);
-            } else {
-                System.out.format(leftAlignFormat, -1 , -1, -1);
+                System.out.format(leftAlignFormat, i , h1Average, h2Average, numOfTests);
             }
-            i += 2;
+            i += 1;
         }
 
-        System.out.format("+---+---------+-------+%n");
+        System.out.format("+---+---------+-------+------+%n");
     }
 
     public int hammingH1() {
@@ -341,6 +331,48 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         return null;
     }
 
+    private static void updateListValues(ArrayList<Integer> array, int index, int value) {
+        array.set(index, array.get(index) + value);
+    }
+
+    //index 0 = hamming values, index 1 = manhattan, index 2 = total times for this depth
+    private static HashMap<Integer, ArrayList<Integer>> runTests(int numbOfTests) {
+       HashMap<Integer, ArrayList<Integer>> tests = new HashMap<>();
+       ArrayList<Integer> testValues;
+       AStar solver;
+       int[] puzzle;
+
+       for (int i = 0; i <= numbOfTests; i++) {
+           puzzle = generatePuzzle();
+
+           solver = new AStar(puzzle, true);
+           if (solver.optimalSequence() != null) {
+               if (tests.containsKey(solver.getDepth())) {
+                   testValues = tests.get(solver.getDepth());
+                   updateListValues(testValues, 0, solver.getCost());
+                   updateListValues(testValues, 2,  1 );
+                   tests.put(solver.getDepth(), testValues);
+               } else {
+                   int count = 1;
+                   testValues = new ArrayList<>();
+                   testValues.add(0, solver.getCost());
+                   testValues.add(1, 0);
+                   testValues.add(2, count);
+                   tests.put(solver.getDepth(),testValues);
+               }
+           }
+
+           solver = new AStar(puzzle, false);
+           if (solver.optimalSequence() != null) {
+               testValues = tests.get(solver.getDepth());
+               updateListValues(testValues, 1, solver.getCost());
+               tests.put(solver.getDepth(), testValues);
+           }
+
+
+       }
+       return tests;
+    }
     @Override
     public int compareTo(EightPuzzle o) {
         int priority1 = stepCost + estimatedCost;
@@ -489,11 +521,15 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
 
                                 solver = new AStar(readPuzzle, true);
                                 System.out.println("Using Hamming");
-                                printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                                if (solver.optimalSequence() != null) {
+                                    printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                                }
 
                                 solver = new AStar(readPuzzle, false);
                                 System.out.println("Using Manhattan");
-                                printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                                if (solver.optimalSequence() != null) {
+                                    printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                                }
                             }
                         }
                     } else {
@@ -502,7 +538,9 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
                     break;
 
                 case 3:
-                    System.out.println("Generating 500 test cases: ");
+                    System.out.println("Generating 1000 test cases: ");
+                    HashMap<Integer, ArrayList<Integer>> tests = runTests(100);
+                    printTable(tests);
                     break;
 
                 case 4:
@@ -515,24 +553,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
 
 
             }
-
-            // debuggo
-//        int startRange = 920;
-//        int endRange = 1019;
-//        for (int i = startRange; i <= endRange; i++) {
-//            int[] testPuzzle = fileReader("puzzles.txt", i);
-//            if (testPuzzle != null) {
-//                System.out.println("Puzzle at line: " + i);
-//
-//                System.out.println("Using hamming:" );
-//                new AStar(testPuzzle, true);
-//
-//                System.out.println("Using man:" );
-//                new AStar(testPuzzle, false);
-//                System.out.print("\n\n");
-//            }
-//        }
         }
-
     }
 }

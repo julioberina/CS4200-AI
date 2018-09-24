@@ -17,11 +17,12 @@ public class AStar {
         EightPuzzle initialPuzzle = new EightPuzzle(initialState, 0, 0, null);
         openSet.add(initialPuzzle);
         EightPuzzle current = null;
+        boolean solvable = true;
         long startTime = System.nanoTime();
         long totalTime = 0;
         //for stopping the algorithm from running too long
         long start = System.currentTimeMillis();
-        long end = start + 5 * 1000;
+        long end = start + 2 * 1000;
 
         if (initialPuzzle.isSolvable()) {
             while (!openSet.isEmpty() && System.currentTimeMillis() < end) {
@@ -50,6 +51,7 @@ public class AStar {
 
         } else {
             System.out.println("\nThis puzzle is not solvable");
+            solvable = false;
         }
 
         optimalPath = new ArrayList<>();
@@ -57,7 +59,6 @@ public class AStar {
             optimalPath.add(current);
             current = current.getPreviousPuzzle();
         }
-        //optimalSequence(optimalPath);
         Collections.reverse(optimalPath);
         cost = closedSet.size();
         time =  totalTime * 0.000001;
@@ -68,18 +69,20 @@ public class AStar {
         start = System.currentTimeMillis();
         end = end - start;
         if (end <= 0) {
-            System.out.println("A* quit after 5 seconds, any results printed will be invalid....");
-            System.out.println("***If it quits after 5 seconds, it definitely has a depth > 24, and my implementation is not memory efficient");
+            System.out.println("A* quit after 2 seconds, any results printed will be invalid....");
+            System.out.println("***If it quits after 2 seconds, it definitely has a depth > 24, and my implementation is not memory efficient");
+            System.out.println();
             cost = -1;
             time = -1;
             depth = -1;
             optimalPath = null;
         }
-        //System.out.println("Time long: " + (totalTime * 0.000001));
-        //System.out.println("Time double: " + (time));
-
-//        System.out.println("searchCost (nodes generated): " + closedSet.size());
-//        System.out.println("Depth: " + (optimalPath.size() - 1));
+        if (!solvable) {
+            cost = -1;
+            time = -1;
+            depth = -1;
+            optimalPath = null;
+        }
     }
 
     public Iterable<EightPuzzle> optimalSequence() {
