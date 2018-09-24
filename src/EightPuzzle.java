@@ -86,6 +86,7 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         return currentPuzzle[location];
     }
 
+    // this function is the problem..too much memory generating puzzles
     private int[] swapTiles(int location1, int location2) {
         int[] tempPuzzle = currentPuzzle.clone();
         int temp = tempPuzzle[location1];
@@ -99,7 +100,6 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         Random random = new Random();
         for (int i = 0; i < puzzle.length; i++) {
             index = random.nextInt(puzzle.length);
-//            System.out.print(index);
             temp = puzzle[index];
             puzzle[index] = puzzle[i];
             puzzle[i] = temp;
@@ -445,11 +445,15 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
 
                     solver = new AStar(board, true);
                     System.out.println("Using Hamming");
-                    printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                    if (solver.optimalSequence() != null) {
+                        printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                    }
 
                     solver = new AStar(board, false);
                     System.out.println("Using Manhattan");
-                    printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                    if (solver.optimalSequence() != null) {
+                        printOutput(solver.optimalSequence(), solver.getDepth(), solver.getCost());
+                    }
                     break;
 
                 case 2:

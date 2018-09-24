@@ -19,8 +19,12 @@ public class AStar {
         EightPuzzle current = null;
         long startTime = System.nanoTime();
         long totalTime = 0;
+        //for stopping the algorithm from running too long
+        long start = System.currentTimeMillis();
+        long end = start + 5 * 1000;
+
         if (initialPuzzle.isSolvable()) {
-            while (!openSet.isEmpty()) {
+            while (!openSet.isEmpty() && System.currentTimeMillis() < end) {
                 current = openSet.remove();
                 closedSet.add(current);
 
@@ -59,6 +63,18 @@ public class AStar {
         time =  totalTime * 0.000001;
         time = Math.round(time * 10000.0)/10000.0;
         depth = optimalPath.size();
+
+        // Testing to see if algorithm went over allotted time
+        start = System.currentTimeMillis();
+        end = end - start;
+        if (end <= 0) {
+            System.out.println("A* quit after 5 seconds, any results printed will be invalid....");
+            System.out.println("***If it quits after 5 seconds, it definitely has a depth > 24, and my implementation is not memory efficient");
+            cost = -1;
+            time = -1;
+            depth = -1;
+            optimalPath = null;
+        }
         //System.out.println("Time long: " + (totalTime * 0.000001));
         //System.out.println("Time double: " + (time));
 
