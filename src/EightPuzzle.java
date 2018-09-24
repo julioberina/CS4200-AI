@@ -1,8 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -463,7 +459,18 @@ public class EightPuzzle implements Comparable<EightPuzzle>{
         int choice = 0;
         while (choice != 4) {
             System.out.println("\nSelect an option:");
-            choice = keyboard.nextInt();
+            System.out.println("1. Generate Random puzzle");
+            System.out.println("2. Enter a puzzle");
+            System.out.println("3. Generate a 1000 test cases");
+            System.out.println("4. Exit\n");
+
+            try {
+                choice = keyboard.nextInt();
+            } catch (InputMismatchException input) {
+                System.out.println("Invalid input");
+            }
+            keyboard.nextLine();
+
             switch (choice) {
                 case 1:
                     do {
