@@ -1,1 +1,1 @@
-# 8Puzzle-CS4200-AI
+# Repo for my AI class projects
