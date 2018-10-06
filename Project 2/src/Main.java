@@ -58,7 +58,7 @@ public class Main {
 //            System.out.println();
 //            i++;
 //        }
-        int[] eightBoard = {3, 2, 1, 4, 3, 2, 1, 2};
+        int[] eightBoard = {3, 2, 2, 4, 3, 2, 1, 2};
 //        int i = 0;
 //        while (i <= 200) {
 //            NQueenBoard test = new NQueenBoard(generateBoard(21));
@@ -82,6 +82,8 @@ public class Main {
         }
         System.out.println("Number of attacking Queens: " + test.getNumberOfAttackers());
 
+        test.moveQueenUpDown(2, false);
+        System.out.println(test.toString());
     }
 
 

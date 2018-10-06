@@ -16,10 +16,23 @@ public class NQueenBoard {
 //        this.numberOfQueens = board.length;
     }
 
-    public void moveQueen(int index) {
+    public void moveQueenRandomly(int index) {
         Random rand = new Random();
         board[index] = rand.nextInt(board.length);
     }
+
+    public void moveQueenUpDown(int index, boolean up) {
+        Random rand = new Random();
+        if (up && board[index] != board.length - 1) {
+            //from the value of the row up (
+            board[index] = rand.nextInt(board.length - (board[index] + 1)) + (board[index] + 1);
+        }
+        else if (board[index] != 0) {
+            board[index] = rand.nextInt(board[index]);
+        }
+    }
+
+
 
     // column = index, row = value
     //Potential issue is attackingQueenPairs init
