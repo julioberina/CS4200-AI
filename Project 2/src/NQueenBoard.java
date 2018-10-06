@@ -16,12 +16,15 @@ public class NQueenBoard {
 //        this.numberOfQueens = board.length;
     }
 
-    public void moveQueenRandomly(int index) {
+    //
+    public NQueenBoard moveQueenRandomly(int index) {
         Random rand = new Random();
         board[index] = rand.nextInt(board.length);
+
+        return new NQueenBoard(board);
     }
 
-    public void moveQueenUpDown(int index, boolean up) {
+    public NQueenBoard moveQueenUpDown(int index, boolean up) {
         Random rand = new Random();
         if (up && board[index] != board.length - 1) {
             //from the value of the row up (
@@ -30,9 +33,23 @@ public class NQueenBoard {
         else if (board[index] != 0) {
             board[index] = rand.nextInt(board[index]);
         }
+        return new NQueenBoard(board);
     }
 
-
+    // divide board length in  half, if  value in index is greater than half, move up,
+    // if less than half, move down
+    // TODO: make it so it moves all the positions, then moves them back so no copy is necessary
+    public NQueenBoard generateSuccessor() {
+        int[]  successor = board.clone();
+        for (int i = 0; i < successor.length; i++) {
+            if (successor[i] <= successor.length / 2) {
+                moveQueenUpDown(i, true);
+            } else {
+                moveQueenUpDown(i, false);
+            }
+        }
+        return new NQueenBoard(successor);
+    }
 
     // column = index, row = value
     //Potential issue is attackingQueenPairs init

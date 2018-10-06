@@ -58,7 +58,7 @@ public class Main {
 //            System.out.println();
 //            i++;
 //        }
-        int[] eightBoard = {3, 2, 2, 4, 3, 2, 1, 2};
+        int[] eightBoard = {3, 2, 1, 4, 3, 2, 1, 2};
 //        int i = 0;
 //        while (i <= 200) {
 //            NQueenBoard test = new NQueenBoard(generateBoard(21));
@@ -69,21 +69,28 @@ public class Main {
 
         NQueenBoard test = new NQueenBoard(eightBoard);
 
+//        test.totalNumberOfAttackingQueens();
+//        for (String pair: test.getAttackingQueenPairs().keySet()) {
+//            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
+//        }
+        System.out.println(test.toString());
         test.totalNumberOfAttackingQueens();
-        for (String pair: test.getAttackingQueenPairs().keySet()) {
-            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
-        }
-        System.out.println(test.toString());
         System.out.println("Number of attacking Queens: " + test.getNumberOfAttackers());
+//
+//        test.numberOfAttackingQueens(1);
+//        for (String pair: test.getAttackingQueenPairs().keySet()) {
+//            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
+//        }
+//        System.out.println("Number of attacking Queens: " + test.getNumberOfAttackers());
+//
+//        test.moveQueenUpDown(3, false);
+//        System.out.println();
 
-        test.numberOfAttackingQueens(1);
-        for (String pair: test.getAttackingQueenPairs().keySet()) {
-            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
-        }
-        System.out.println("Number of attacking Queens: " + test.getNumberOfAttackers());
-
-        test.moveQueenUpDown(2, false);
-        System.out.println(test.toString());
+        SimulatedAnnealing simulatedAnnealingTest = new SimulatedAnnealing(test);
+        NQueenBoard testSolution = simulatedAnnealingTest.getSolutionBoard();
+        System.out.println("The board is solved: " + testSolution.isSolved());
+        System.out.println("Number of attacking Queens: " + testSolution.getNumberOfAttackers());
+        System.out.println(testSolution.toString());
     }
 
 
