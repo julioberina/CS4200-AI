@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class NQueenBoard {
     private int[] board;
+    private int numberOfAttackers;
 //    private int size;
 //    private int numberOfQueens;
 
@@ -18,9 +19,9 @@ public class NQueenBoard {
     }
 
     // column = index, row = value
-    public HashMap<String, ArrayList<Integer[]>> numberOfAttackingQueens() {
-        int numberOfAttackers = 0;
-        HashMap<String, ArrayList<Integer[]>> attackingQueenPairs = new HashMap<>();
+    public HashMap<String, ArrayList<String>> numberOfAttackingQueens() {
+        numberOfAttackers = 0;
+        HashMap<String, ArrayList<String>> attackingQueenPairs = new HashMap<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = i + 1; j < board.length; j++) {
                 int elem1 = board[i];
@@ -29,7 +30,8 @@ public class NQueenBoard {
                 // Checking if on the same row
                 if (elem1 == elem2) {
                     numberOfAttackers++;
-                    addPair(attackingQueenPairs, i, j, elem1, elem2);
+                    //addPair(attackingQueenPairs, i, j, elem1, elem2);
+                    addPair(attackingQueenPairs, Arrays.toString(new int[] {i, elem1}), Arrays.toString(new int[] {j, elem2}));
 
                 // Finding diagonal rows
                 } else {
@@ -37,7 +39,8 @@ public class NQueenBoard {
                     int deltaRow = calculateDifference(elem1, elem2);
                     if (deltaCol == deltaRow) {
                         numberOfAttackers++;
-                        addPair(attackingQueenPairs, i, j, elem1, elem2);
+                        //addPair(attackingQueenPairs, i, j, elem1, elem2);
+                        addPair(attackingQueenPairs, Arrays.toString(new int[] {i, elem1}), Arrays.toString(new int[] {j, elem2}));
                     }
 
                 }
@@ -45,20 +48,32 @@ public class NQueenBoard {
 
             }
         }
-        System.out.println("Number of attackers: " + numberOfAttackers);
         return attackingQueenPairs;
     }
 
-    private static void addPair(HashMap<String, ArrayList<Integer[]>> attackingQueenPairs, int queenOneCol, int queenTwoCol, int queenOneRow, int queenTwoRow) {
-        ArrayList<Integer[]> queen;
+    private static void addPair(HashMap<String, ArrayList<String>> attackingQueenPairs, int queenOneCol, int queenTwoCol, int queenOneRow, int queenTwoRow) {
+        ArrayList<String> queen;
         if (attackingQueenPairs.containsKey(Arrays.toString(new Integer[]{queenOneCol, queenOneRow}))) {
             queen = attackingQueenPairs.get(Arrays.toString(new Integer[]{queenOneCol, queenOneRow}));
-            queen.add(new Integer[] {queenTwoCol, queenTwoRow});
+            queen.add(Arrays.toString(new Integer[] {queenTwoCol, queenTwoRow}));
             attackingQueenPairs.put(Arrays.toString(new Integer[]{queenOneCol, queenOneRow}), queen);
         } else {
             queen = new ArrayList<>();
-            queen.add(new Integer[] {queenTwoCol, queenTwoRow});
+            queen.add(Arrays.toString(new Integer[] {queenTwoCol, queenTwoRow}));
             attackingQueenPairs.put(Arrays.toString(new Integer[]{queenOneCol, queenOneRow}), queen);
+        }
+    }
+
+    private static void addPair(HashMap<String, ArrayList<String>> attackingQueenPairs, String queen1, String queen2) {
+        ArrayList<String> queens;
+        if (attackingQueenPairs.containsKey(queen1)) {
+            queens = attackingQueenPairs.get(queen1);
+            queens.add(queen2);
+            attackingQueenPairs.put(queen1, queens);
+        } else {
+            queens = new ArrayList<>();
+            queens.add(queen2);
+            attackingQueenPairs.put(queen1, queens);
         }
     }
 
@@ -68,7 +83,7 @@ public class NQueenBoard {
 
 
     public boolean isSolved() {
-        return false;
+        return numberOfAttackers == 0;
     }
 
     @Override

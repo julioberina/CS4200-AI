@@ -58,7 +58,6 @@ public class Main {
 //            System.out.println();
 //            i++;
 //        }
-        int[] testboard;
         int[] eightBoard = {3, 2, 1, 4, 3, 2, 1, 2};
 //        int i = 0;
 //        while (i <= 200) {
