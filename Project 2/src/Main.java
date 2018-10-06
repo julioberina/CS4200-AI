@@ -59,16 +59,17 @@ public class Main {
 //            i++;
 //        }
         int[] eightBoard = {3, 2, 1, 4, 3, 2, 1, 2};
-//        int i = 0;
-//        while (i <= 200) {
-//            testboard = generateBoard(500);
-//            NQueenBoard test = new NQueenBoard(testboard);
-//            test.numberOfAttackingQueens();
-//            i++;
-//        }
+        int i = 0;
+        while (i <= 200) {
+            NQueenBoard test = new NQueenBoard(generateBoard(21));
+            test.numberOfAttackingQueens();
+            System.out.println(test.toString());
+            i++;
+        }
+
         NQueenBoard test = new NQueenBoard(eightBoard);
         test.numberOfAttackingQueens();
-        System.out.println();
+        System.out.println(test.toString());
     }
 
 

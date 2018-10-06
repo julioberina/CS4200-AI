@@ -87,9 +87,42 @@ public class NQueenBoard {
     }
 
     @Override
+    // column = index, row = value
     public String toString() {
+        StringBuilder printBoard = new StringBuilder();
+        for (int i = board.length - 1; i >= 0; i--){
+            if (i < 10) {
+                printBoard.append(" ").append(i);
+            } else {
+                printBoard.append(i);
+            }
+            for (int j = 0; j < board.length; j++) {
+                if (i == board[j]) {
+                    printBoard.append("  Q");
+                } else {
+                    printBoard.append("  .");
+                }
+            }
 
-        return "test";
+            printBoard.append("\n");
+            if (i == 0) {
+                int rowNum = 0;
+                while (rowNum < board.length) {
+                    if (rowNum == 0) {
+                        printBoard.append("   ");
+                    }
+
+                    if (rowNum > 0 && rowNum <= 10)  {
+                        printBoard.append("  ").append(rowNum);
+                        rowNum++;
+                    } else {
+                        printBoard.append(" ").append(rowNum);
+                        rowNum++;
+                    }
+                }
+            }
+        }
+        return printBoard.toString();
     }
 
 }
