@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 
 public class NQueenBoard {
     private int[] board;
     private int numberOfAttackers;
+    private HashMap<String, ArrayList<String>> attackingQueenPairs;
 //    private int size;
 //    private int numberOfQueens;
 
@@ -14,14 +16,16 @@ public class NQueenBoard {
 //        this.numberOfQueens = board.length;
     }
 
-    public void moveQueens() {
-
+    public void moveQueen(int index) {
+        Random rand = new Random();
+        board[index] = rand.nextInt(board.length);
     }
 
     // column = index, row = value
-    public HashMap<String, ArrayList<String>> numberOfAttackingQueens() {
+    //Potential issue is attackingQueenPairs init
+    public void totalNumberOfAttackingQueens() {
         numberOfAttackers = 0;
-        HashMap<String, ArrayList<String>> attackingQueenPairs = new HashMap<>();
+        attackingQueenPairs = new HashMap<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = i + 1; j < board.length; j++) {
                 int elem1 = board[i];
@@ -48,7 +52,35 @@ public class NQueenBoard {
 
             }
         }
-        return attackingQueenPairs;
+    }
+
+    // Potential optimization...only calculate queen of one column, not all. could be used to update attackingQueenPairs array
+    public void numberOfAttackingQueens(int index) {
+        attackingQueenPairs.remove(Arrays.toString(new int[] {index, board[index]}));
+
+       numberOfAttackers = 0;
+       int elem1 = board[index];
+       for (int i = 0; i < board.length; i++) {
+           int elem2 = board[i];
+
+           // Checking if on the same row
+           if (elem1 == elem2 && index != i) {
+               numberOfAttackers++;
+               addPair(attackingQueenPairs, Arrays.toString(new int[] {index, elem1}), Arrays.toString(new int[] {i, elem2}));
+
+           // Finding diagonal rows
+           } else {
+               if (index != i && (calculateDifference(index, i) == calculateDifference(elem1, elem2) || calculateSum(index, i) == calculateSum(elem1, elem2))) {
+                   numberOfAttackers++;
+                   addPair(attackingQueenPairs, Arrays.toString(new int[] {index, elem1}), Arrays.toString(new int[] {i, elem2}));
+               }
+           }
+
+       }
+       // TODO: test isSolved
+       if (isSolved()) {
+           attackingQueenPairs.remove(Arrays.toString(new int[] {index, elem1}));
+       }
     }
 
     private static void addPair(HashMap<String, ArrayList<String>> attackingQueenPairs, int queenOneCol, int queenTwoCol, int queenOneRow, int queenTwoRow) {
@@ -81,9 +113,19 @@ public class NQueenBoard {
         return  Math.abs(a - b);
     }
 
-
+    public int calculateSum(int a, int b) {
+        return a + b;
+    }
     public boolean isSolved() {
         return numberOfAttackers == 0;
+    }
+
+    public int getNumberOfAttackers() {
+        return numberOfAttackers;
+    }
+
+    public HashMap<String, ArrayList<String>> getAttackingQueenPairs() {
+        return attackingQueenPairs;
     }
 
     @Override

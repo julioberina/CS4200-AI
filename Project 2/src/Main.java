@@ -59,17 +59,29 @@ public class Main {
 //            i++;
 //        }
         int[] eightBoard = {3, 2, 1, 4, 3, 2, 1, 2};
-        int i = 0;
-        while (i <= 200) {
-            NQueenBoard test = new NQueenBoard(generateBoard(21));
-            test.numberOfAttackingQueens();
-            System.out.println(test.toString());
-            i++;
-        }
+//        int i = 0;
+//        while (i <= 200) {
+//            NQueenBoard test = new NQueenBoard(generateBoard(21));
+//            test.numberOfAttackingQueens();
+//            System.out.println(test.toString());
+//            i++;
+//        }
 
         NQueenBoard test = new NQueenBoard(eightBoard);
-        test.numberOfAttackingQueens();
+
+        test.totalNumberOfAttackingQueens();
+        for (String pair: test.getAttackingQueenPairs().keySet()) {
+            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
+        }
         System.out.println(test.toString());
+        System.out.println("Number of attacking Queens: " + test.getNumberOfAttackers());
+
+        test.numberOfAttackingQueens(1);
+        for (String pair: test.getAttackingQueenPairs().keySet()) {
+            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
+        }
+        System.out.println("Number of attacking Queens: " + test.getNumberOfAttackers());
+
     }
 
 
