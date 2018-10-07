@@ -11,40 +11,63 @@ public class SimulatedAnnealing {
     public SimulatedAnnealing(NQueenBoard board) {
         double temperature = 1;
         double minTemperature = .0001;
-        double coolingRate = .99;
+        double coolingRate = .5;
+        int numOfIterations = 40;
         double probability;
-        int numOfIterations = 8;
         int deltaE;
         Random rand = new Random();
         NQueenBoard current = board;
         NQueenBoard successor;
 
-        int count = 1;
 
+//        for (int temperature = 100; temperature > 0; temperature--) {
+//            successor = current.moveQueenRandomly(rand.nextInt(8));
+//
+//            if (current.totalNumberOfAttackingQueens() == 0) {
+//                break;
+//            }
+//
+//            deltaE = successor.totalNumberOfAttackingQueens() - current.totalNumberOfAttackingQueens();
+//            System.out.println("DeltaE: " + deltaE);
+//            probability = Math.exp(deltaE / temperature);
+//
+//            System.out.println("Probability: " + probability);
+//
+//            double randomProb = rand.nextDouble();
+//            System.out.println("Random prob: " + randomProb);
+//
+//            System.out.println(current.toString());
+//            System.out.println(successor.toString());
+//
+//            if (deltaE > 0) {
+//                current = successor;
+//            } else if (randomProb <= probability) {
+//                current = successor;
+//            }
+//        }
         while (temperature > minTemperature) {
             for (int i = 0; i < numOfIterations; i++) {
-                successor = current.moveQueenRandomly(i);
-                current.totalNumberOfAttackingQueens();
-                successor.totalNumberOfAttackingQueens();
+                successor = current.moveQueenRandomly(rand.nextInt(8));
+                deltaE = successor.totalNumberOfAttackingQueens() - current.totalNumberOfAttackingQueens();
 
-                deltaE = successor.getNumberOfAttackers() - current.getNumberOfAttackers();
-                System.out.println("DeltaE: " + deltaE);
+//                System.out.println("DeltaE: " + deltaE);
                 probability = Math.exp(deltaE / temperature);
-                System.out.println("Probability: " + probability);
+
+//                System.out.println("Probability: " + probability);
                 double randomProb = rand.nextDouble();
-                System.out.println("Random prob: " + randomProb);
-                if (deltaE > 0) {
-                    current = successor;
-                }
-                else if (randomProb <= probability) {
+
+//                System.out.println("Random prob: " + randomProb);
+
+//                System.out.println(current.toString());
+//                System.out.println(successor.toString());
+
+                if (randomProb >= probability) {
                     current = successor;
                 }
             }
             temperature *= coolingRate;
-            count++;
         }
 
-        System.out.println("Number of iterations: " + count);
         solutionBoard = current;
     }
 
@@ -57,7 +80,7 @@ public class SimulatedAnnealing {
     }
 
     public boolean isSolved() {
-        return isSolved;
+        return solutionBoard.totalNumberOfAttackingQueens() == 0;
     }
 
     public NQueenBoard getSolutionBoard() {

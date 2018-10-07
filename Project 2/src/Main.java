@@ -12,17 +12,15 @@ public class Main {
         return generatedBoard;
     }
 
-    public void algorithmAnalysis(boolean useGenetic, int numberOfPuzzles, int sizeOfPuzzle) {
+    public static void algorithmAnalysis(boolean useGenetic, int numberOfPuzzles, int sizeOfPuzzle) {
         int solvedProblems, searchCostTotal, runtimesTotal;
         solvedProblems = searchCostTotal = runtimesTotal = 0;
-        int[] board;
         GeneticAlgorithm geneticAlgorithm;
         SimulatedAnnealing simulatedAnnealing;
         for (int i = 1; i <= numberOfPuzzles; i++) {
-            board = generateBoard(sizeOfPuzzle);
 
             if (useGenetic) {
-                geneticAlgorithm = new GeneticAlgorithm(new NQueenBoard(board));
+                geneticAlgorithm = new GeneticAlgorithm(new NQueenBoard(generateBoard(sizeOfPuzzle)));
                 if (geneticAlgorithm.isSolved()) {
                     solvedProblems += 1;
                 }
@@ -30,7 +28,7 @@ public class Main {
                 runtimesTotal += geneticAlgorithm.getRuntime();
 
             } else {
-                simulatedAnnealing = new SimulatedAnnealing(new NQueenBoard(board));
+                simulatedAnnealing = new SimulatedAnnealing(new NQueenBoard(generateBoard(sizeOfPuzzle)));
                 if (simulatedAnnealing.isSolved()) {
                     solvedProblems += 1;
                 }
@@ -40,7 +38,9 @@ public class Main {
         }
 
         System.out.println("Averages for board of size " + sizeOfPuzzle);
-        System.out.println("Percentage of puzzles solved: " + solvedProblems / numberOfPuzzles);
+        System.out.println("Number of solved puzzles " + solvedProblems);
+        double percentSolvedPuzzles = solvedProblems * 1.0 / numberOfPuzzles;
+        System.out.println("Percentage of puzzles solved: " + percentSolvedPuzzles);
         System.out.println("Average search cost: " + searchCostTotal/ numberOfPuzzles);
         System.out.println("Average runtime: " + runtimesTotal/ numberOfPuzzles);
     }
@@ -73,10 +73,10 @@ public class Main {
 //        for (String pair: test.getAttackingQueenPairs().keySet()) {
 //            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
 //        }
-        System.out.println(test.toString());
-        test.totalNumberOfAttackingQueens();
-        System.out.println("Number of attacking Queens: " + test.getNumberOfAttackers());
-//
+//        System.out.println(test.toString());
+//        test.totalNumberOfAttackingQueens();
+//        System.out.println("Number of attacking Queens: " + test.totalNumberOfAttackingQueens());
+////
 //        test.numberOfAttackingQueens(1);
 //        for (String pair: test.getAttackingQueenPairs().keySet()) {
 //            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
@@ -85,12 +85,17 @@ public class Main {
 //
 //        test.moveQueenUpDown(3, false);
 //        System.out.println();
+//
+//        test.moveQueenRandomly(1);
+//        System.out.println(test.toString());
+//
+//        SimulatedAnnealing simulatedAnnealingTest = new SimulatedAnnealing(test);
+//        NQueenBoard testSolution = simulatedAnnealingTest.getSolutionBoard();
+//        System.out.println("The board is solved: " + testSolution.isSolved());
+//        System.out.println("Number of attacking Queens: " + testSolution.totalNumberOfAttackingQueens());
+//        System.out.println(testSolution.toString());
 
-        SimulatedAnnealing simulatedAnnealingTest = new SimulatedAnnealing(test);
-        NQueenBoard testSolution = simulatedAnnealingTest.getSolutionBoard();
-        System.out.println("The board is solved: " + testSolution.isSolved());
-        System.out.println("Number of attacking Queens: " + testSolution.getNumberOfAttackers());
-        System.out.println(testSolution.toString());
+        algorithmAnalysis(false, 500, 8);
     }
 
 

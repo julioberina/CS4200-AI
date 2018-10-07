@@ -16,45 +16,22 @@ public class NQueenBoard {
 //        this.numberOfQueens = board.length;
     }
 
-    //
     public NQueenBoard moveQueenRandomly(int index) {
+        int[] successor = board.clone();
         Random rand = new Random();
-        board[index] = rand.nextInt(board.length);
+        int n = rand.nextInt(successor.length);
 
-        return new NQueenBoard(board);
-    }
+        while (n == successor[index]) {
+            n = rand.nextInt(successor.length);
+        }
 
-    public NQueenBoard moveQueenUpDown(int index, boolean up) {
-        Random rand = new Random();
-        if (up && board[index] != board.length - 1) {
-            //from the value of the row up (
-            board[index] = rand.nextInt(board.length - (board[index] + 1)) + (board[index] + 1);
-        }
-        else if (board[index] != 0) {
-            board[index] = rand.nextInt(board[index]);
-        }
-        return new NQueenBoard(board);
-    }
-
-    // divide board length in  half, if  value in index is greater than half, move up,
-    // if less than half, move down
-    // TODO: make it so it moves all the positions, then moves them back so no copy is necessary
-    public NQueenBoard generateSuccessor() {
-        int[]  successor = board.clone();
-        for (int i = 0; i < successor.length; i++) {
-            if (successor[i] <= successor.length / 2) {
-                moveQueenUpDown(i, true);
-            } else {
-                moveQueenUpDown(i, false);
-            }
-        }
+        successor[index] = n;
         return new NQueenBoard(successor);
     }
 
     // column = index, row = value
     //Potential issue is attackingQueenPairs init
-    public void totalNumberOfAttackingQueens() {
-        numberOfAttackers = 0;
+    public void allAttackingQueenPairs() {
         attackingQueenPairs = new HashMap<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = i + 1; j < board.length; j++) {
@@ -84,11 +61,39 @@ public class NQueenBoard {
         }
     }
 
+    //TODO: change to use global variable, if still needed
+    public int totalNumberOfAttackingQueens() {
+        int numberOfAttackingQueens = 0;
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = i + 1; j < board.length; j++) {
+                int elem1 = board[i];
+                int elem2 = board[j];
+
+                // Checking if on the same row
+                if (elem1 == elem2) {
+                    numberOfAttackingQueens++;
+
+                // Finding diagonal rows
+                } else {
+                    int deltaCol = calculateDifference(i, j);
+                    int deltaRow = calculateDifference(elem1, elem2);
+                    if (deltaCol == deltaRow) {
+                        numberOfAttackingQueens++;
+                    }
+                }
+
+
+            }
+        }
+        return numberOfAttackingQueens;
+    }
+
     // Potential optimization...only calculate queen of one column, not all. could be used to update attackingQueenPairs array
     public void numberOfAttackingQueens(int index) {
-        attackingQueenPairs.remove(Arrays.toString(new int[] {index, board[index]}));
-
+//        attackingQueenPairs.remove(Arrays.toString(new int[] {index, board[index]}));
        numberOfAttackers = 0;
+       attackingQueenPairs = new HashMap<>();
        int elem1 = board[index];
        for (int i = 0; i < board.length; i++) {
            int elem2 = board[i];
@@ -107,10 +112,10 @@ public class NQueenBoard {
            }
 
        }
-       // TODO: test isSolved
-       if (isSolved()) {
-           attackingQueenPairs.remove(Arrays.toString(new int[] {index, elem1}));
-       }
+//       // TODO: test isSolved
+//       if (isSolved()) {
+//           attackingQueenPairs.remove(Arrays.toString(new int[] {index, elem1}));
+//       }
     }
 
     private static void addPair(HashMap<String, ArrayList<String>> attackingQueenPairs, int queenOneCol, int queenTwoCol, int queenOneRow, int queenTwoRow) {
@@ -147,7 +152,7 @@ public class NQueenBoard {
         return a + b;
     }
     public boolean isSolved() {
-        return numberOfAttackers == 0;
+        return totalNumberOfAttackingQueens() == 0;
     }
 
     public int getNumberOfAttackers() {
