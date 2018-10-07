@@ -7,12 +7,12 @@ public class NQueenBoard {
     private int[] board;
     private int numberOfAttackers;
     private HashMap<String, ArrayList<String>> attackingQueenPairs;
-//    private int size;
+    private int size;
 //    private int numberOfQueens;
 
     public NQueenBoard(int[] board) {
         this.board = board;
-//        this.size = board.length;
+        this.size = board.length;
 //        this.numberOfQueens = board.length;
     }
 
@@ -202,4 +202,7 @@ public class NQueenBoard {
         return printBoard.toString();
     }
 
+    public int getSize() {
+        return size;
+    }
 }

@@ -89,13 +89,13 @@ public class Main {
 //        test.moveQueenRandomly(1);
 //        System.out.println(test.toString());
 //
-//        SimulatedAnnealing simulatedAnnealingTest = new SimulatedAnnealing(test);
+//        SimulatedAnnealing simulatedAnnealingTest = new SimulatedAnnealing(new NQueenBoard(generateBoard(21)));
 //        NQueenBoard testSolution = simulatedAnnealingTest.getSolutionBoard();
 //        System.out.println("The board is solved: " + testSolution.isSolved());
 //        System.out.println("Number of attacking Queens: " + testSolution.totalNumberOfAttackingQueens());
 //        System.out.println(testSolution.toString());
 
-        algorithmAnalysis(false, 500, 8);
+        algorithmAnalysis(false, 500, 21);
     }
 
 

@@ -11,10 +11,13 @@ public class SimulatedAnnealing {
     public SimulatedAnnealing(NQueenBoard board) {
         double temperature = 1;
         double minTemperature = .0001;
-        double coolingRate = .5;
-        int numOfIterations = 40;
+        //.7 -> .25
+        //.8 -> .50
+        //.9 -> .80
+        double coolingRate = .9;
+        int numOfIterations = 100;
         double probability;
-        int deltaE;
+        double deltaE;
         Random rand = new Random();
         NQueenBoard current = board;
         NQueenBoard successor;
@@ -47,8 +50,8 @@ public class SimulatedAnnealing {
 //        }
         while (temperature > minTemperature) {
             for (int i = 0; i < numOfIterations; i++) {
-                successor = current.moveQueenRandomly(rand.nextInt(8));
-                deltaE = successor.totalNumberOfAttackingQueens() - current.totalNumberOfAttackingQueens();
+                successor = current.moveQueenRandomly(rand.nextInt(current.getSize()));
+                deltaE = current.totalNumberOfAttackingQueens() - successor.totalNumberOfAttackingQueens();
 
 //                System.out.println("DeltaE: " + deltaE);
                 probability = Math.exp(deltaE / temperature);
@@ -61,7 +64,7 @@ public class SimulatedAnnealing {
 //                System.out.println(current.toString());
 //                System.out.println(successor.toString());
 
-                if (randomProb >= probability) {
+                if (probability > randomProb) {
                     current = successor;
                 }
             }
