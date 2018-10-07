@@ -38,11 +38,11 @@ public class Main {
         }
 
         System.out.println("Averages for board of size " + sizeOfPuzzle);
-        System.out.println("Number of solved puzzles " + solvedProblems);
-        double percentSolvedPuzzles = solvedProblems * 1.0 / numberOfPuzzles;
-        System.out.println("Percentage of puzzles solved: " + percentSolvedPuzzles);
+//        System.out.println("Number of solved puzzles " + solvedProblems);
+        double percentSolvedPuzzles = (solvedProblems * 1.0 / numberOfPuzzles) * 100.0;
+        System.out.println("Percentage of puzzles solved: " + percentSolvedPuzzles + "%");
         System.out.println("Average search cost: " + searchCostTotal/ numberOfPuzzles);
-        System.out.println("Average runtime: " + runtimesTotal/ numberOfPuzzles);
+        System.out.println("Average runtime: " + (runtimesTotal/ numberOfPuzzles) * 0.000001 + "ms");
     }
 
     public static void main(String[] args) {
