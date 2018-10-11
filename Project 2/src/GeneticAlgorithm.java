@@ -1,4 +1,5 @@
 import java.util.PriorityQueue;
+import java.util.Random;
 
 
 public class GeneticAlgorithm implements Comparable<NQueenBoard>{
@@ -16,6 +17,7 @@ public class GeneticAlgorithm implements Comparable<NQueenBoard>{
 
     @Override
     // Calculating and sorting by (fitness = attacking Queen pairs)
+    //TODO: check proirity1, may not work as expected
     public int compareTo(NQueenBoard o) {
         int priority1 = currentBoard.totalNumberOfAttackingQueens();
         int priority2 = o.totalNumberOfAttackingQueens();
@@ -43,13 +45,49 @@ public class GeneticAlgorithm implements Comparable<NQueenBoard>{
     }
 
     public NQueenBoard generateChild(NQueenBoard mom, NQueenBoard dad) {
+        Random rand = new Random();
         NQueenBoard child;
+        int[] momBoard = mom.getBoard();
+        int[] dadBoard = dad.getBoard();
+        int crossover =  rand.nextInt((momBoard.length - 2)) + 2;
 
-        return child;
+        int[] childBoard = new int[momBoard.length];
+        for (int i = 0; i < momBoard.length; i++) {
+            if (i >= crossover) {
+                childBoard[i] = momBoard[i];
+            } else {
+                childBoard[i] = dadBoard[i];
+            }
+        }
+
+//        System.out.println("Crossover value: " + crossover);
+//        System.out.println("Mom: ");
+//        System.out.println(mom.toString());
+//        System.out.println("Dad: " );
+//        System.out.println(dad.toString());
+
+//        child = new NQueenBoard(childBoard);
+//        System.out.println("Child before mute: ");
+//        System.out.println(child.toString());
+//        child = mutate(child);
+//        System.out.println("Child after mute: ");
+//        System.out.println(child.toString());
+//        return child;
+        return mutate(new NQueenBoard(childBoard));
     }
 
-    public void mutate(NQueenBoard child) {
+    // TODO: test mutating one values instead of multiple
+    public NQueenBoard mutate(NQueenBoard child) {
+        Random rand = new Random();
+        double mutationRate = .10;
 
+        for (int i = 0; i < child.getSize(); i++) {
+            if (rand.nextDouble() <= mutationRate) {
+                child = child.moveQueenRandomly(i);
+            }
+        }
+
+        return child;
     }
 
     public int getFitness() {
@@ -60,9 +98,9 @@ public class GeneticAlgorithm implements Comparable<NQueenBoard>{
         return solutionBoard;
     }
 
-    public NQueenBoard[] generatePopulation() {
-        NQueenBoard[] population;
-
-        return population;
-    }
+//    public NQueenBoard[] generatePopulation() {
+//        NQueenBoard[] population;
+//
+//        return population;
+//    }
 }

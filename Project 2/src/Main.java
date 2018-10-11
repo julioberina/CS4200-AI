@@ -47,47 +47,20 @@ public class Main {
 
     public static void main(String[] args) {
         int[] eightBoard = {3, 2, 1, 4, 3, 2, 1, 2};
-//        int i = 0;
-//        while (i <= 200) {
-//            NQueenBoard test = new NQueenBoard(generateBoard(21));
-//            test.numberOfAttackingQueens();
-//            System.out.println(test.toString());
-//            i++;
-//        }
-
         NQueenBoard test = new NQueenBoard(eightBoard);
 
-//        test.totalNumberOfAttackingQueens();
-//        for (String pair: test.getAttackingQueenPairs().keySet()) {
-//            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
-//        }
-//        System.out.println(test.toString());
-//        test.totalNumberOfAttackingQueens();
-//        System.out.println("Number of attacking Queens: " + test.totalNumberOfAttackingQueens());
-////
-//        test.numberOfAttackingQueens(1);
-//        for (String pair: test.getAttackingQueenPairs().keySet()) {
-//            System.out.println("Key: " + pair + ", Value: " + test.getAttackingQueenPairs().get(pair));
-//        }
-//        System.out.println("Number of attacking Queens: " + test.getNumberOfAttackers());
-//
-//        test.moveQueenUpDown(3, false);
-//        System.out.println();
-//
-//        test.moveQueenRandomly(1);
-//        System.out.println(test.toString());
-//
-//        SimulatedAnnealing simulatedAnnealingTest = new SimulatedAnnealing(new NQueenBoard(generateBoard(21)));
-//        NQueenBoard testSolution = simulatedAnnealingTest.getSolutionBoard();
-//        System.out.println("The board is solved: " + testSolution.isSolved());
-//        System.out.println("Number of attacking Queens: " + testSolution.totalNumberOfAttackingQueens());
-//        System.out.println(testSolution.toString());
 
-        long startTime = System.currentTimeMillis();
-        algorithmAnalysis(false, 500, 21);
-        long totalTime = System.currentTimeMillis() - startTime;
+//        long startTime = System.currentTimeMillis();
+//        algorithmAnalysis(false, 500, 21);
+//        long totalTime = System.currentTimeMillis() - startTime;
+//
+//        System.out.println("Total time: " + totalTime);
 
-        System.out.println("Total time: " + totalTime);
+        NQueenBoard mom = new NQueenBoard(generateBoard(8));
+        NQueenBoard dad = new NQueenBoard(generateBoard(8));
+
+        GeneticAlgorithm testGA = new GeneticAlgorithm(mom);
+        testGA.generateChild(mom, dad);
     }
 
 

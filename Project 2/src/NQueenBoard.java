@@ -205,4 +205,8 @@ public class NQueenBoard {
     public int getSize() {
         return size;
     }
+
+    public int[] getBoard() {
+        return board;
+    }
 }
