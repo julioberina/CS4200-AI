@@ -29,14 +29,13 @@ public class SimulatedAnnealing {
         while (temperature > minTemperature) {
             for (int i = 0; i < numOfIterations; i++) {
                 successor = current.moveQueenRandomly(rand.nextInt(current.getSize()));
-
                 deltaE = current.totalNumberOfAttackingQueens() - successor.totalNumberOfAttackingQueens();
-                cost += Math.abs(deltaE);
                 probability = Math.exp(deltaE / temperature);
                 double randomProb = rand.nextDouble();
 
                 if (probability > randomProb) {
                     current = successor;
+                    cost += 1;
                 }
             }
             temperature *= coolingRate;
