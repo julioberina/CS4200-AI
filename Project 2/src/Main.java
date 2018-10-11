@@ -17,8 +17,8 @@ public class Main {
         solvedProblems = searchCostTotal = runtimesTotal = 0;
         GeneticAlgorithm geneticAlgorithm;
         SimulatedAnnealing simulatedAnnealing;
-        for (int i = 1; i <= numberOfPuzzles; i++) {
 
+        for (int i = 1; i <= numberOfPuzzles; i++) {
             if (useGenetic) {
                 geneticAlgorithm = new GeneticAlgorithm(new NQueenBoard(generateBoard(sizeOfPuzzle)));
                 if (geneticAlgorithm.isSolved()) {
@@ -46,18 +46,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-// testing board generator
-//        int[] testBoards;
-//        int i = 0;
-//        while (i <= 50) {
-//            testBoards = generateBoard(21);
-//            System.out.print("Test board " + i +   "  of size " + testBoards.length + ": ");
-//            for (int num : testBoards) {
-//                System.out.print(num + " ");
-//            }
-//            System.out.println();
-//            i++;
-//        }
         int[] eightBoard = {3, 2, 1, 4, 3, 2, 1, 2};
 //        int i = 0;
 //        while (i <= 200) {
@@ -95,7 +83,11 @@ public class Main {
 //        System.out.println("Number of attacking Queens: " + testSolution.totalNumberOfAttackingQueens());
 //        System.out.println(testSolution.toString());
 
+        long startTime = System.currentTimeMillis();
         algorithmAnalysis(false, 500, 21);
+        long totalTime = System.currentTimeMillis() - startTime;
+
+        System.out.println("Total time: " + totalTime);
     }
 
 
