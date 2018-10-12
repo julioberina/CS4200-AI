@@ -10,10 +10,11 @@ public class GeneticAlgorithm {
     // keep individuals sorted by fitness in a pq
     public GeneticAlgorithm(int sizeOfPuzzle) {
         this.sizeOfPuzzle = sizeOfPuzzle;
-        int numToGenerate = 200;
+        int populationSize = 200;
 
-        PriorityQueue<NQueenBoard> population = new PriorityQueue<>(generatePopulation(numToGenerate));
+        PriorityQueue<NQueenBoard> population = new PriorityQueue<>(generatePopulation(populationSize));
         ArrayList<NQueenBoard> newPopulation;
+        ArrayList<NQueenBoard> topXPercent;
 
         double percentToGrab = .30;
         int elites = Math.toIntExact(Math.round(population.size() * percentToGrab));
@@ -22,23 +23,33 @@ public class GeneticAlgorithm {
         long timeOut = startTimeOut + 60 * 1000;
 
 //        double probabilityOfMutation = .20;
-//        Random rand = new Random();
+        Random rand = new Random();
 
         NQueenBoard current = population.peek();
 
+        // better algorithm.....
+        // get top 30% of the population, select parents randomly and reproduce
+        //      need an arraylist for selecting parents randomly
+        //      pq with top %30
         while (System.currentTimeMillis() < timeOut && !current.isSolved()) {
             newPopulation = new ArrayList<>();
+            topXPercent = new ArrayList<>();
             System.out.println("size of Population: " + population.size());
 
-
-            if (population.size() % 2 != 0) {
-                population.poll();
+            for (int i = 0; i < elites; i++) {
+                topXPercent.add(population.poll());
             }
 
 
-            for (int i = 0; i < population.size(); i++) {
-                NQueenBoard mom = population.poll();
-                NQueenBoard dad = population.poll();
+//            if (population.size() % 2 != 0) {
+//                population.poll();
+//            }
+
+            for (int i = 0; i < populationSize; i++) {
+
+                // might grab the same individual....
+                NQueenBoard mom = topXPercent.get(rand.nextInt(topXPercent.size()));
+                NQueenBoard dad = topXPercent.get(rand.nextInt(topXPercent.size()));
                 NQueenBoard child = generateChild(mom, dad);
 
                 if (child.isSolved()) {
@@ -46,8 +57,6 @@ public class GeneticAlgorithm {
                     break;
                 }
 
-                newPopulation.add(mom);
-                newPopulation.add(dad);
                 newPopulation.add(child);
             }
 
