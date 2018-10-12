@@ -4,60 +4,58 @@ import java.util.*;
 public class GeneticAlgorithm {
     private int cost;
     private long runtime;
-    private NQueenBoard currentBoard;
+    private int sizeOfPuzzle;
     private NQueenBoard solutionBoard;
 
     // keep individuals sorted by fitness in a pq
-    public GeneticAlgorithm(NQueenBoard board) {
-        this.currentBoard = board;
-//        ArrayList<NQueenBoard> population = generatePopulation(board.getSize());
-        ArrayList<NQueenBoard> population = generatePopulation(100000);
-        PriorityQueue<NQueenBoard> fitnessPQ = new PriorityQueue<>(population);
-        double percentToGrab = .20;
-        ArrayList<NQueenBoard> newPopulation = new ArrayList<>();
-        PriorityQueue<NQueenBoard> newFitnessPQ = new PriorityQueue<>();
+    public GeneticAlgorithm(int sizeOfPuzzle) {
+        this.sizeOfPuzzle = sizeOfPuzzle;
+        int numToGenerate = 200;
+
+        PriorityQueue<NQueenBoard> population = new PriorityQueue<>(generatePopulation(numToGenerate));
+        ArrayList<NQueenBoard> newPopulation;
+
+        double percentToGrab = .30;
+        int elites = Math.toIntExact(Math.round(population.size() * percentToGrab));
 
         long startTimeOut = System.currentTimeMillis();
         long timeOut = startTimeOut + 60 * 1000;
 
-        while (System.currentTimeMillis() < timeOut) {
-            System.out.println("Size of population: " + population.size());
-            System.out.println("FitnessPQ size: " + Math.round(fitnessPQ.size()));
+//        double probabilityOfMutation = .20;
+//        Random rand = new Random();
 
-            int topXPercent = Math.toIntExact(Math.round(fitnessPQ.size() * percentToGrab));
-            System.out.println("value of top x: " + topXPercent);
-            for (int i = 0; i < topXPercent; i++) {
-                newFitnessPQ.add(fitnessPQ.poll());
-//                newPopulation.add(generateChild(fitnessPQ.remove(), fitnessPQ.remove()));
-            }
+        NQueenBoard current = population.peek();
 
-            System.out.println("newFitnessPQ size: " + newFitnessPQ.size());
+        while (System.currentTimeMillis() < timeOut && !current.isSolved()) {
+            newPopulation = new ArrayList<>();
+            System.out.println("size of Population: " + population.size());
 
-            if (newFitnessPQ.size() % 2 != 0) {
-                newFitnessPQ.poll();
-            }
 
-            while (!newFitnessPQ.isEmpty()) {
-                newPopulation.add(generateChild(newFitnessPQ.poll(), newFitnessPQ.poll()));
+            if (population.size() % 2 != 0) {
+                population.poll();
             }
 
 
-            System.out.println("Size of new population: " + newPopulation.size() + "\n");
+            for (int i = 0; i < population.size(); i++) {
+                NQueenBoard mom = population.poll();
+                NQueenBoard dad = population.poll();
+                NQueenBoard child = generateChild(mom, dad);
 
-            population = new ArrayList<>(newPopulation);
-            fitnessPQ = new PriorityQueue<>(population);
+                if (child.isSolved()) {
+                    current = child;
+                    break;
+                }
 
-            if (fitnessPQ.peek() != null && fitnessPQ.peek().isSolved()) {
-                solutionBoard = fitnessPQ.remove();
-                fitnessPQ.clear();
-                break;
+                newPopulation.add(mom);
+                newPopulation.add(dad);
+                newPopulation.add(child);
             }
 
-
+            population = new PriorityQueue<>(newPopulation);
+            System.out.println("size of Population after new pop: " + population.size() + "\n");
         }
 
-
-
+        solutionBoard = population.poll();
     }
 
     public int getCost() {
@@ -117,6 +115,7 @@ public class GeneticAlgorithm {
 
         return child;
     }
+
     public NQueenBoard mutateOne(NQueenBoard child) {
         Random rand = new Random();
 
@@ -125,19 +124,16 @@ public class GeneticAlgorithm {
         return child;
     }
 
-    public int getFitness() {
-        return currentBoard.totalNumberOfAttackingQueens();
-    }
 
     public NQueenBoard getSolutionBoard() {
         return solutionBoard;
     }
 
-    public ArrayList<NQueenBoard> generatePopulation(int size) {
+    public ArrayList<NQueenBoard> generatePopulation(int numToGenerate) {
         ArrayList<NQueenBoard> population = new ArrayList<>();
 
-        for (int i = 0; i < size; i++) {
-            population.add(new NQueenBoard(Main.generateBoard(currentBoard.getSize())));
+        for (int i = 0; i < numToGenerate; i++) {
+            population.add(new NQueenBoard(Main.generateBoard(sizeOfPuzzle)));
         }
 
         return population;
