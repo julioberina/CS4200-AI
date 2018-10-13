@@ -5,6 +5,7 @@ public class GeneticAlgorithm {
     private int cost;
     private long runtime;
     private int sizeOfPuzzle;
+    private NQueenBoard initialBoard;
     private NQueenBoard solutionBoard;
 
     public GeneticAlgorithm(int sizeOfPuzzle) {
@@ -23,6 +24,7 @@ public class GeneticAlgorithm {
         long timeOut = startTimeOut + 2 * 1000;
 
         NQueenBoard current = population.peek();
+        initialBoard = population.peek();
 
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() < timeOut && !current.isSolved()) {
@@ -111,5 +113,9 @@ public class GeneticAlgorithm {
         }
 
         return population;
+    }
+
+    public NQueenBoard getInitialBoard(){
+        return initialBoard;
     }
 }
