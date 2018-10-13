@@ -20,7 +20,7 @@ public class Main {
 
         for (int i = 1; i <= numberOfPuzzles; i++) {
             if (useGenetic) {
-                geneticAlgorithm = new GeneticAlgorithm(new NQueenBoard(generateBoard(sizeOfPuzzle)));
+                geneticAlgorithm = new GeneticAlgorithm(sizeOfPuzzle);
                 if (geneticAlgorithm.isSolved()) {
                     solvedProblems += 1;
                 }
@@ -38,29 +38,33 @@ public class Main {
         }
 
         System.out.println("Averages for board of size " + sizeOfPuzzle);
-//        System.out.println("Number of solved puzzles " + solvedProblems);
         double percentSolvedPuzzles = (solvedProblems * 1.0 / numberOfPuzzles) * 100.0;
         System.out.println("Percentage of puzzles solved: " + percentSolvedPuzzles + "%");
         System.out.println("Average search cost: " + searchCostTotal/ numberOfPuzzles);
-        System.out.println("Average runtime: " + (runtimesTotal/ numberOfPuzzles) * 0.000001 + "ms");
+        if (useGenetic) {
+            System.out.println("Average runtime: " + (runtimesTotal/ numberOfPuzzles) + "ms");
+        } else {
+            System.out.println("Average runtime: " + (runtimesTotal/ numberOfPuzzles) * 0.000001 + "ms");
+        }
     }
 
     public static void main(String[] args) {
-        int[] eightBoard = {3, 2, 1, 4, 3, 2, 1, 2};
-        NQueenBoard test = new NQueenBoard(eightBoard);
 
 
-//        long startTime = System.currentTimeMillis();
-//        algorithmAnalysis(false, 500, 21);
-//        long totalTime = System.currentTimeMillis() - startTime;
-//
-//        System.out.println("Total time: " + totalTime);
+        System.out.println("Analysis of Simulated Annealing: ");
+        long startTime = System.currentTimeMillis();
+        algorithmAnalysis(false, 500, 21);
+        long totalTime = System.currentTimeMillis() - startTime;
+        System.out.println("Total time: " + totalTime);
 
-        NQueenBoard mom = new NQueenBoard(generateBoard(8));
-        NQueenBoard dad = new NQueenBoard(generateBoard(8));
+        System.out.println("\n");
 
-        GeneticAlgorithm testGA = new GeneticAlgorithm(mom);
-        testGA.generateChild(mom, dad);
+        System.out.println("Analysis of Genetic: ");
+        startTime = System.currentTimeMillis();
+        algorithmAnalysis(true, 500, 21);
+        totalTime = System.currentTimeMillis() - startTime;
+        System.out.println("Total time: " + totalTime);
+
     }
 
 
