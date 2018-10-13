@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Random;
 
 public class NQueenBoard implements Comparable<NQueenBoard>{
@@ -25,9 +22,6 @@ public class NQueenBoard implements Comparable<NQueenBoard>{
         return new NQueenBoard(successor);
     }
 
-
-
-    //TODO: Test, changed to global var
     public int totalNumberOfAttackingQueens() {
         int numberOfAttackers = 0;
 
@@ -48,10 +42,9 @@ public class NQueenBoard implements Comparable<NQueenBoard>{
                         numberOfAttackers++;
                     }
                 }
-
-
             }
         }
+
         return numberOfAttackers;
     }
 
@@ -64,7 +57,6 @@ public class NQueenBoard implements Comparable<NQueenBoard>{
     }
 
     @Override
-    // column = index, row = value
     public String toString() {
         StringBuilder printBoard = new StringBuilder();
         for (int i = board.length - 1; i >= 0; i--){
@@ -99,6 +91,7 @@ public class NQueenBoard implements Comparable<NQueenBoard>{
                 }
             }
         }
+
         return printBoard.toString();
     }
 
@@ -114,8 +107,7 @@ public class NQueenBoard implements Comparable<NQueenBoard>{
     public int compareTo(NQueenBoard o) {
         int priority1 =  new NQueenBoard(board).totalNumberOfAttackingQueens();
         int priority2 = o.totalNumberOfAttackingQueens();
-        System.out.println("Priority 1: " + priority1);
-        System.out.println("Priority 2: " + priority2);
+
         if (priority1 < priority2) {
             return -1;
         } else if (priority1 > priority2) {
@@ -125,4 +117,5 @@ public class NQueenBoard implements Comparable<NQueenBoard>{
         }
 
     }
+
 }
