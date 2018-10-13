@@ -5,15 +5,6 @@ public class SimulatedAnnealing {
     private long runtime;
     private NQueenBoard solutionBoard;
 
-    // values for cooling rate -> percent correct
-    //.7 -> .25
-    //.8 -> .50
-    //.9 -> .80
-    //.925 -> .9
-    //.93 -> .93
-    //,94 -> .95 (slowish)
-    //.95 -> .98 (Slow)
-    //.99 -> 1 (Very slow)
     public SimulatedAnnealing(NQueenBoard board) {
         double temperature = 1;
         double minTemperature = .0001;
@@ -29,13 +20,13 @@ public class SimulatedAnnealing {
         while (temperature > minTemperature) {
             for (int i = 0; i < numOfIterations; i++) {
                 successor = current.moveQueenRandomly(rand.nextInt(current.getSize()));
+                cost += 1;
                 deltaE = current.totalNumberOfAttackingQueens() - successor.totalNumberOfAttackingQueens();
                 probability = Math.exp(deltaE / temperature);
                 double randomProb = rand.nextDouble();
 
                 if (probability > randomProb) {
                     current = successor;
-                    cost += 1;
                 }
             }
             temperature *= coolingRate;
