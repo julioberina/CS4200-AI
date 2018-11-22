@@ -46,4 +46,18 @@ public class FourInALineBoard {
         return printBoard.toString();
     }
 
+    public HashMap<Integer, String> getBoard() {
+        return board;
+    }
+
+    public void addKeyValue(int key, String XorO) {
+        if (!board.containsKey(key)) { board.put(key, XorO); }
+        else {System.out.println("Key " + key + " already exists in board HashMap");}
+    }
+
+    public boolean isFourInARow() {
+
+        return false;
+    }
+
 }
