@@ -8,6 +8,7 @@ public class Main {
     // or make this a gameplay loop method
     public static void playGame(FourInALineBoard board) {
         Scanner keyboard = new Scanner(System.in);
+        HashMap<Integer, MovePairs> moveList = new HashMap<>();
 
         System.out.print("Who goes first, C for computer, O for opponent: ");
 
@@ -29,6 +30,7 @@ public class Main {
             System.out.print("Player's move is: ");
         }
 
+        int moveNumber = 1;
         while (!board.hasFourInARow()) {
             String move = null;
             move = keyboard.next();
@@ -45,21 +47,80 @@ public class Main {
                     isX = true;
                 }
 
-                System.out.println(board.toString(isComputer));
-                if (isComputer) {
-                    isComputer = false;
+                if (!moveList.containsKey(moveNumber)) {
+                    MovePairs mp = new MovePairs();
+                    mp.setMoveOne(move);
+                    moveList.put(moveNumber, mp);
+                } else {
+                    MovePairs mp = moveList.get(moveNumber);
+                    mp.setMoveTwo(move);
+                    moveList.put(moveNumber, mp);
+                    moveNumber += 1;
+                }
+
+                System.out.println();
+                printBoardAndMoves(board.toString(), moveListOutputter(moveList, isComputer));
+                System.out.println();
+
+                if (!isX) {
                     System.out.print("Choose Opponent's next move: ");
                 } else {
-                    isComputer = true;
                     System.out.print("Choose Player's next move: ");
                 }
 
             }
-
         }
+
     }
 
 
+    public static String moveListOutputter(HashMap<Integer, MovePairs> moveList, boolean isComputer) {
+        StringBuilder moveListString = new StringBuilder();
+
+        if (isComputer) {
+            moveListString.append("Player vs. Opponent");
+        } else {
+            moveListString.append("Opponent vs. Player");
+        }
+        moveListString.append("\n");
+
+        for (int key: moveList.keySet()) {
+            MovePairs mp = moveList.get(key);
+
+            if (mp.getMoveTwo() != null) {
+                moveListString.append(key).append(". ").append(mp.getMoveOne()).append("  " ).append(mp.getMoveTwo());
+            } else {
+                moveListString.append(key).append(". ").append(mp.getMoveOne()).append(" " );
+            }
+
+            moveListString.append("\n");
+        }
+
+        return moveListString.toString();
+    }
+
+    public static void printBoardAndMoves(String board, String moves) {
+        String[] boardLines = board.split("\n");
+        String[] moveLines = moves.split("\n");
+
+        int i = 0;
+        int j = 0;
+        while (i < boardLines.length && j < moveLines.length) {
+            System.out.println(boardLines[i] + "       " + moveLines[j]);
+            i++;
+            j++;
+        }
+
+        while (i < boardLines.length){
+            System.out.println(boardLines[i]);
+            i++;
+        }
+
+        while (j < moveLines.length){
+            System.out.println("                                 " + moveLines[j]);
+            j++;
+        }
+    }
 
     public static int convertMovetoIndex(String move) {
         int index = -1;

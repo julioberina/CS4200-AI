@@ -8,7 +8,8 @@ public class FourInALineBoard {
         this.board = board;
     }
 
-    public String toString(boolean isComputer) {
+    @Override
+    public String toString() {
         StringBuilder printBoard = new StringBuilder();
 
         for (int i = 0 ; i <=  8; i++) {
@@ -18,13 +19,6 @@ public class FourInALineBoard {
                 printBoard.append("  ").append(i);
             }
         }
-
-        if (isComputer) {
-            printBoard.append("      Player vs Opponent");
-        } else {
-            printBoard.append("      Opponent vs Player");
-        }
-
         printBoard.append("\n");
 
         int asciiValue = 65;
@@ -46,7 +40,9 @@ public class FourInALineBoard {
                 }
             }
 
-            printBoard.append("\n");
+            if (i < 8) {
+                printBoard.append("\n");
+            }
         }
 
         return printBoard.toString();
