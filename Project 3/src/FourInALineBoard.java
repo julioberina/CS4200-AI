@@ -8,8 +8,7 @@ public class FourInALineBoard {
         this.board = board;
     }
 
-    @Override
-    public String toString() {
+    public String toString(boolean isComputer) {
         StringBuilder printBoard = new StringBuilder();
 
         for (int i = 0 ; i <=  8; i++) {
@@ -19,6 +18,13 @@ public class FourInALineBoard {
                 printBoard.append("  ").append(i);
             }
         }
+
+        if (isComputer) {
+            printBoard.append("      Player vs Opponent");
+        } else {
+            printBoard.append("      Opponent vs Player");
+        }
+
         printBoard.append("\n");
 
         int asciiValue = 65;
@@ -55,7 +61,7 @@ public class FourInALineBoard {
         else {System.out.println("Key " + key + " already exists in board HashMap");}
     }
 
-    public boolean isFourInARow() {
+    public boolean hasFourInARow() {
 
         return false;
     }
