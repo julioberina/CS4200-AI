@@ -32,13 +32,9 @@ public class FourInALineBoard {
 //                System.out.println("Index value: " + index1D);
 
                 if (board.containsKey(index1D)) {
-                    if (board.get(index1D).equals("X")) {
-                        printBoard.append("  X");
-                    } else if (board.get(index1D).equals("O")) {
-                        printBoard.append("  O");
-                    } else {
-                        throw new Error("Invalid piece in board");
-                    }
+                    if (board.get(index1D).equals("X")) { printBoard.append("  X"); }
+                    else if (board.get(index1D).equals("O")) { printBoard.append("  O"); }
+                    else { throw new Error("Invalid piece in board"); }
 
                 } else {
                     printBoard.append("  -");
@@ -58,11 +54,8 @@ public class FourInALineBoard {
     }
 
     public void addKeyValue(int key, String XorO) {
-        if (!board.containsKey(key)) {
-            board.put(key, XorO);
-        } else {
-            System.out.println("Key " + key + " already exists in board HashMap");
-        }
+        if (!board.containsKey(key)) { board.put(key, XorO);
+        } else { System.out.println("Key " + key + " already exists in board HashMap"); }
     }
 
     public boolean isDraw() {
@@ -77,8 +70,8 @@ public class FourInALineBoard {
 
                 if (board.containsKey(index1D)) {
                     String value = board.get(index1D);
-                    if (value.equals("X")) {convertedHashmap[i][j] = 1;}
-                    else if (value.equals("O")) {convertedHashmap[i][j] = 2;}
+                    if (value.equals("X")) { convertedHashmap[i][j] = 1; }
+                    else if (value.equals("O")) { convertedHashmap[i][j] = 2; }
                     else {convertedHashmap[i][j] = 0;}
                 }
 
