@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 public class Main {
 
-    // Either pass a move into this method, have gameplay loop in main
-    // or make this a gameplay loop method
     public static void playGame(FourInALineBoard board) {
         Scanner keyboard = new Scanner(System.in);
         HashMap<Integer, MovePairs> moveList = new HashMap<>();
