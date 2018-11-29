@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Main {
 
+    // TODO: fix issue with existing keys in hashmap being added to movelist
     public static void playGame(FourInALineBoard board) {
         Scanner keyboard = new Scanner(System.in);
         HashMap<Integer, MovePairs> moveList = new HashMap<>();
@@ -29,7 +30,7 @@ public class Main {
         }
 
         int moveNumber = 1;
-        while (!board.hasFourInARow()) {
+        while (!board.hasFourInARow(board.convertToArray()) && !board.isDraw()) {
             String move = null;
             move = keyboard.next();
 
@@ -67,8 +68,15 @@ public class Main {
                 }
 
             }
+
         }
 
+        System.out.println();
+        if (!isX) {
+            System.out.println("X wins!");
+        } else {
+            System.out.println("O wins!");
+        }
     }
 
 
@@ -152,9 +160,32 @@ public class Main {
 //        testMap.put(24, "O");
 //        testMap.put(30, "X");
 //        testMap.put(64, "O");
+//        System.out.println(testBoard.toString());
+//
+//        int[][] testArray = testBoard.convertToArray();
+//
+//        for (int i = 0; i < testArray.length; i++) {
+//            for (int j = 0; j < testArray.length; j++) {
+//                System.out.print(testArray[i][j] + " ");
+//            }
+//            System.out.println();
+//        }
+
 
         HashMap<Integer, String> playerPositions = new HashMap<>();
         FourInALineBoard board = new FourInALineBoard(playerPositions);
+
+//        int i = 1;
+//        while (!board.isDraw()) {
+//            board.addKeyValue(i, "X");
+//            System.out.println(board.toString());
+//            System.out.println("i = " + i);
+//            i++;
+//        }
+//
+//        for(int key: board.getBoard().keySet()) {
+//            System.out.println("Key " + key);
+//        }
 
         playGame(board);
 
