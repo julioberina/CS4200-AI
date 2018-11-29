@@ -57,6 +57,11 @@ public class FourInALineBoard {
         else {System.out.println("Key " + key + " already exists in board HashMap");}
     }
 
+    public boolean isDraw() {
+        System.out.println("\nhashmap size: " + board.size());
+        return board.size() >= 64;
+    }
+
     public boolean hasFourInARow() {
 
         return false;
