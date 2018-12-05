@@ -36,7 +36,7 @@ public class MiniMax {
             bclones[i].addKeyValue(((row-1)*8+col+1), "X");
             int tempBest = best;
             best = Math.max(best, minimax(depth+1, false, bclones[i], alpha, beta));
-            if (best > tempBest)  optimalBoard = bclones[i];
+            if (best >= tempBest)  optimalBoard = bclones[i];
             alpha = Math.max(alpha, best);
           }
 
@@ -44,7 +44,7 @@ public class MiniMax {
             bclones[i].addKeyValue(((row+1)*8+col+1), "X");
             int tempBest = best;
             best = Math.max(best, minimax(depth+1, false, bclones[i], alpha, beta));
-            if (best > tempBest)  optimalBoard = bclones[i];
+            if (best >= tempBest)  optimalBoard = bclones[i];
             alpha = Math.max(alpha, best);
           }
 
@@ -52,7 +52,7 @@ public class MiniMax {
             bclones[i].addKeyValue((row*8+col), "X");
             int tempBest = best;
             best = Math.max(best, minimax(depth+1, false, bclones[i], alpha, beta));
-            if (best > tempBest)  optimalBoard = bclones[i];
+            if (best >= tempBest)  optimalBoard = bclones[i];
             alpha = Math.max(alpha, best);
           }
 
@@ -60,7 +60,7 @@ public class MiniMax {
             bclones[i].addKeyValue((row*8+col+2), "X");
             int tempBest = best;
             best = Math.max(best, minimax(depth+1, false, bclones[i], alpha, beta));
-            if (best > tempBest)  optimalBoard = bclones[i];
+            if (best >= tempBest)  optimalBoard = bclones[i];
             alpha = Math.max(alpha, best);
           }
 
@@ -90,7 +90,7 @@ public class MiniMax {
             bclones[i].addKeyValue(((row-1)*8+col+1), "O");
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
-            if (best < tempBest)  optimalBoard = bclones[i];
+            if (best <= tempBest)  optimalBoard = bclones[i];
             beta = Math.min(alpha, best);
           }
 
@@ -98,7 +98,7 @@ public class MiniMax {
             bclones[i].addKeyValue(((row+1)*8+col+1), "O");
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
-            if (best < tempBest)  optimalBoard = bclones[i];
+            if (best <= tempBest)  optimalBoard = bclones[i];
             beta = Math.min(beta, best);
           }
 
@@ -106,7 +106,7 @@ public class MiniMax {
             bclones[i].addKeyValue((row*8+col), "O");
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
-            if (best < tempBest)  optimalBoard = bclones[i];
+            if (best <= tempBest)  optimalBoard = bclones[i];
             beta = Math.min(beta, best);
           }
 
@@ -114,7 +114,7 @@ public class MiniMax {
             bclones[i].addKeyValue((row*8+col+2), "O");
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
-            if (best < tempBest)  optimalBoard = bclones[i];
+            if (best <= tempBest)  optimalBoard = bclones[i];
             beta = Math.min(beta, best);
           }
 
