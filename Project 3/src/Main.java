@@ -94,7 +94,7 @@ public class Main {
                 if (!isX) {
                     System.out.print("Choose Opponent's next move: ");
                 } else {
-                    System.out.print("Choose Player's next move: ");
+                    System.out.print("Player is making move...");
                 }
 
             }
