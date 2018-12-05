@@ -32,7 +32,7 @@ public class MiniMax {
           int row = lastMove / 8;
           int col = lastMove % 8;
 
-          if (i == 0 && row > 0 && temp[row-1][col] > 0) {
+          if (i == 0 && row > 0 && temp[row-1][col] == 0) {
             bclones[i].addKeyValue(((row-1)*8+col+1), "X");
             int tempBest = best;
             best = Math.max(best, minimax(depth+1, false, bclones[i], alpha, beta));
@@ -40,7 +40,7 @@ public class MiniMax {
             alpha = Math.max(alpha, best);
           }
 
-          if (i == 1 && row < 7 && temp[row+1][col] > 0) {
+          if (i == 1 && row < 7 && temp[row+1][col] == 0) {
             bclones[i].addKeyValue(((row+1)*8+col+1), "X");
             int tempBest = best;
             best = Math.max(best, minimax(depth+1, false, bclones[i], alpha, beta));
@@ -48,7 +48,7 @@ public class MiniMax {
             alpha = Math.max(alpha, best);
           }
 
-          if (i == 2 && col > 0 && temp[row][col-1] > 0) {
+          if (i == 2 && col > 0 && temp[row][col-1] == 0) {
             bclones[i].addKeyValue((row*8+col), "X");
             int tempBest = best;
             best = Math.max(best, minimax(depth+1, false, bclones[i], alpha, beta));
@@ -56,7 +56,7 @@ public class MiniMax {
             alpha = Math.max(alpha, best);
           }
 
-          if (i == 3 && col < 7 && temp[row][col+1] > 0) {
+          if (i == 3 && col < 7 && temp[row][col+1] == 0) {
             bclones[i].addKeyValue((row*8+col+2), "X");
             int tempBest = best;
             best = Math.max(best, minimax(depth+1, false, bclones[i], alpha, beta));
@@ -86,7 +86,7 @@ public class MiniMax {
           int row = lastMove / 8;
           int col = lastMove % 8;
 
-          if (i == 0 && row > 0 && temp[row-1][col] > 0) {
+          if (i == 0 && row > 0 && temp[row-1][col] == 0) {
             bclones[i].addKeyValue(((row-1)*8+col+1), "O");
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
@@ -94,7 +94,7 @@ public class MiniMax {
             beta = Math.min(alpha, best);
           }
 
-          if (i == 1 && row < 7 && temp[row+1][col] > 0) {
+          if (i == 1 && row < 7 && temp[row+1][col] == 0) {
             bclones[i].addKeyValue(((row+1)*8+col+1), "O");
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
@@ -102,7 +102,7 @@ public class MiniMax {
             beta = Math.min(beta, best);
           }
 
-          if (i == 2 && col > 0 && temp[row][col-1] > 0) {
+          if (i == 2 && col > 0 && temp[row][col-1] == 0) {
             bclones[i].addKeyValue((row*8+col), "O");
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
@@ -110,7 +110,7 @@ public class MiniMax {
             beta = Math.min(beta, best);
           }
 
-          if (i == 3 && col < 7 && temp[row][col+1] > 0) {
+          if (i == 3 && col < 7 && temp[row][col+1] == 0) {
             bclones[i].addKeyValue((row*8+col+2), "O");
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
