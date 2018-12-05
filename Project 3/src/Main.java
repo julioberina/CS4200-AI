@@ -114,7 +114,7 @@ public class Main {
         int theMove = move - 1;
         String answer = "";
         answer += (char)(65 + (theMove/8));
-        answer += Integer.toString(theMove%8);
+        answer += Integer.toString((theMove%8)+1);
         return answer;
     }
 
