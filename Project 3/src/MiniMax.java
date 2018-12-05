@@ -3,7 +3,7 @@ import java.util.HashMap;
 public class MiniMax {
     private int MIN = -Integer.MIN_VALUE;
     private int MAX = Integer.MAX_VALUE;
-    private int maxDepth = 6;
+    private int maxDepth = 32;
     private int moveToMake = 0;
     private FourInALineBoard optimalBoard;
 
