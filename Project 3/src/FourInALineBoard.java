@@ -4,6 +4,7 @@ import java.util.HashMap;
 public class FourInALineBoard {
     private HashMap<Integer, String> board;
     private final int BOARD_SIZE = 8;
+    private int lastMove = 0;
 
     FourInALineBoard(HashMap<Integer, String> board) {
         this.board = board;
@@ -49,6 +50,8 @@ public class FourInALineBoard {
         return printBoard.toString();
     }
 
+    public int getLastMove() { return lastMove; }
+
     public HashMap<Integer, String> getBoard() {
         return board;
     }
@@ -57,13 +60,19 @@ public class FourInALineBoard {
         if (key < 1 || key > 64) {
             System.out.println("Invalid move passed into playGame method");
         } else {
-            if (!board.containsKey(key)) { board.put(key, XorO); }
+            if (!board.containsKey(key)) { board.put(key, XorO); lastMove = key; }
             else { System.out.println("Key " + key + " already exists in board HashMap"); }
         }
     }
 
     public boolean isDraw() {
         return board.size() >= 64;
+    }
+
+    public int aiScore(int player) {
+      if (player == 1)  return 1;
+      else if (player == 2) return -1;
+      else    return 0;
     }
 
     public int[][] convertToArray() {
@@ -110,7 +119,7 @@ public class FourInALineBoard {
             }
         }
 
-        return false;
+        return 0;
     }
 //
     // Convert the hashMap to two arrays
