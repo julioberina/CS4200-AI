@@ -22,11 +22,8 @@ public class MiniMax {
         FourInALineBoard[] bclones = new FourInALineBoard[4];
 
         for (int i = 0; i < 4; ++i) {
-          try {
             HashMap map = (HashMap)b.getBoard().clone();
             bclones[i] = new FourInALineBoard(map);
-          }
-          catch (CloneNotSupportedException e) { e.printStackTrace(); }
         }
 
         for (int i = 0; i < 4; ++i) {
@@ -79,11 +76,8 @@ public class MiniMax {
         FourInALineBoard[] bclones = new FourInALineBoard[4];
 
         for (int i = 0; i < 4; ++i) {
-          try {
             HashMap map = (HashMap)b.getBoard().clone();
             bclones[i] = new FourInALineBoard(map);
-          }
-          catch (CloneNotSupportedException e) { e.printStackTrace(); }
         }
 
         for (int i = 0; i < 4; ++i) {
@@ -121,7 +115,7 @@ public class MiniMax {
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
             if (best < tempBest)  optimalBoard = bclones[i];
-            beta = Math.min(betaa, best);
+            beta = Math.min(beta, best);
           }
 
           if (beta <= alpha)    break;

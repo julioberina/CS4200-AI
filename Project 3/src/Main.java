@@ -29,7 +29,7 @@ public class Main {
         }
 
         int moveNumber = 1;
-        while (!board.hasFourInARow(board.convertToArray()) && !board.isDraw()) {
+        while (board.hasFourInARow(board.convertToArray()) == 0 && !board.isDraw()) {
             String move = null;
             move = keyboard.next();
 
