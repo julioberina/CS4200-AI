@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Main {
 
-    // TODO: fix issue with existing keys in hashmap being added to movelist
     public static void playGame(FourInALineBoard board) {
         Scanner keyboard = new Scanner(System.in);
         HashMap<Integer, MovePairs> moveList = new HashMap<>();
@@ -139,8 +138,12 @@ public class Main {
         } else {
             try {
                 int number = Integer.parseInt(move.substring(1, 2));
-                asciiLetter = asciiLetter - 64;
-                index = ((asciiLetter * 8) + number) - 8;
+                if (number < 1 || number > 8) {
+                    System.out.println("Invalid move");
+                } else {
+                    asciiLetter = asciiLetter - 64;
+                    index = ((asciiLetter * 8) + number) - 8;
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid move");
                 return -1;
