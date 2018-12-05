@@ -36,6 +36,7 @@ public class Main {
         while (board.hasFourInARow(board.convertToArray()) == 0 && !board.isDraw()) {
             int index = 0;
             String move = null;
+            boolean validInput = false;
         
             if (isX) {
                 if (initMoveMade == false) {
@@ -49,9 +50,21 @@ public class Main {
                 }
             }
             else {
-                move = keyboard.next();
-                index = convertMovetoIndex(move);
+
+                do {
+                    move = keyboard.next();
+                    index = convertMovetoIndex(move);
+
+                    if (index != -1) {
+                        validInput = true;
+                    } else {
+                        System.out.println("Invalid input, try again");
+                    }
+
+                } while(!validInput);
+
             }
+
             if (index < 1 || index > 64) {
                 System.out.println("Invalid move passed into playGame method");
             } else {
@@ -165,7 +178,7 @@ public class Main {
             try {
                 int number = Integer.parseInt(move.substring(1, 2));
                 if (number < 1 || number > 8) {
-                    System.out.println("Invalid move");
+                    return -1;
                 } else {
                     asciiLetter = asciiLetter - 64;
                     index = ((asciiLetter * 8) + number) - 8;
