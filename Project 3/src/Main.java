@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Main {
 
@@ -8,6 +9,8 @@ public class Main {
         Scanner keyboard = new Scanner(System.in);
         HashMap<Integer, MovePairs> moveList = new HashMap<>();
         MiniMax mm = new MiniMax();
+        boolean initMoveMade = false;
+        Random rand = new Random();
 
         System.out.print("Who goes first, C for computer, O for opponent: ");
 
@@ -35,8 +38,15 @@ public class Main {
             String move = null;
         
             if (isX) {
-                index = mm.getNextMove(board);
-                move = convertMoveToStr(index);
+                if (initMoveMade == false) {
+                    move = convertMoveToStr(rand.nextInt(64) + 1);
+                    index = convertMovetoIndex(move);
+                    initMoveMade = true;
+                }
+                else {
+                    index = mm.getNextMove(board);
+                    move = convertMoveToStr(index);
+                }
             }
             else {
                 move = keyboard.next();
