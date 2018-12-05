@@ -7,6 +7,7 @@ public class Main {
     public static void playGame(FourInALineBoard board) {
         Scanner keyboard = new Scanner(System.in);
         HashMap<Integer, MovePairs> moveList = new HashMap<>();
+        MiniMax mm = new MiniMax();
 
         System.out.print("Who goes first, C for computer, O for opponent: ");
 
@@ -30,10 +31,17 @@ public class Main {
 
         int moveNumber = 1;
         while (board.hasFourInARow(board.convertToArray()) == 0 && !board.isDraw()) {
+            int index = 0;
             String move = null;
-            move = keyboard.next();
-
-            int index = convertMovetoIndex(move);
+        
+            if (isX) {
+                index = mm.getNextMove(board);
+                move = convertMoveToStr(index);
+            }
+            else {
+                move = keyboard.next();
+                index = convertMovetoIndex(move);
+            }
             if (index < 1 || index > 64) {
                 System.out.println("Invalid move passed into playGame method");
             } else {
@@ -78,6 +86,14 @@ public class Main {
         }
     }
 
+    
+    public static String convertMoveToStr(int move) {
+        int theMove = move - 1;
+        String answer = "";
+        answer += (char)(65 + (theMove/8));
+        answer += Integer.toString(theMove%8);
+        return answer;
+    }
 
     public static String moveListOutputter(HashMap<Integer, MovePairs> moveList, boolean isComputer) {
         StringBuilder moveListString = new StringBuilder();

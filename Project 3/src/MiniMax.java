@@ -111,7 +111,7 @@ public class MiniMax {
           }
 
           if (i == 3 && col < 7 && temp[row][col+1] > 0) {
-            bclones[i].addKeyValue((row*8+col+2), "X");
+            bclones[i].addKeyValue((row*8+col+2), "O");
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
             if (best < tempBest)  optimalBoard = bclones[i];
