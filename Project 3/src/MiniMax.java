@@ -5,6 +5,8 @@ public class MiniMax {
     private int MAX = Integer.MAX_VALUE;
     private int maxDepth = 32;
     private int moveToMake = 0;
+    private unsigned long startTime = 0; // For cutoff test
+    private boolean timedOut = false;
     private FourInALineBoard optimalBoard;
 
     public int minimax(int depth, boolean isMax, FourInALineBoard b, int alpha, int beta) {
@@ -13,8 +15,10 @@ public class MiniMax {
       if (score == -1 || score == 1)
         return score;
       
-      if (depth == maxDepth)
+      if (depth == maxDepth) {
+        if ((System.nanoTime() - startTime) >= 24e9)    timedOut = true;
         return 0;
+      }
 
       if (isMax) {
         int best = MIN;
@@ -126,7 +130,30 @@ public class MiniMax {
     }
 
     public int getNextMove(FourInALineBoard board) {
+      startTime = System.nanoTime();
       int score = minimax(0, true, board, MIN, MAX);
+      
+      if (timedOut) {
+        boolean gotMove = false;
+        int moveToReturn = 0;
+        int[][] temp = board.convertToArray();
+        
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                if (temp[i][j] == 0) {
+                    gotMove = true;
+                    moveToReturn = i*8+col+1;
+                    break;
+                }
+            }
+            
+            if (gotMove)    break;
+        }
+        
+        timedOut = false;
+        return moveToReturn;
+      }
+      
       return optimalBoard.getLastMove();
     }
 }
