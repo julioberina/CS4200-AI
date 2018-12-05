@@ -87,7 +87,7 @@ public class FourInALineBoard {
     }
 
     // TODO: Come up a way to directly check the hashmap instead of converting to a 2d array
-    public boolean hasFourInARow(int[][] board) {
+    public int hasFourInARow(int[][] board) {
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
                 int player = board[r][c];
@@ -98,14 +98,14 @@ public class FourInALineBoard {
                         player == board[r][c + 1] &&
                         player == board[r][c + 2] &&
                         player == board[r][c + 3])
-                    return true;
+                    return player;
 
                 // Look vertically
                 if (r + 3 < BOARD_SIZE) {
                     if (player == board[r + 1][c] &&
                             player == board[r + 2][c] &&
                             player == board[r + 3][c])
-                        return true;
+                        return player;
                 }
             }
         }
