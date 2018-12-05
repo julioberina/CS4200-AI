@@ -91,7 +91,7 @@ public class MiniMax {
             int tempBest = best;
             best = Math.min(best, minimax(depth+1, true, bclones[i], alpha, beta));
             if (best <= tempBest)  optimalBoard = bclones[i];
-            beta = Math.min(alpha, best);
+            beta = Math.min(beta, best);
           }
 
           if (i == 1 && row < 7 && temp[row+1][col] == 0) {
