@@ -5,7 +5,7 @@ public class MiniMax {
     private int MAX = Integer.MAX_VALUE;
     private int maxDepth = 32;
     private int moveToMake = 0;
-    private unsigned long startTime = 0; // For cutoff test
+    private long startTime = 0; // For cutoff test
     private boolean timedOut = false;
     private FourInALineBoard optimalBoard;
 
@@ -137,19 +137,19 @@ public class MiniMax {
         boolean gotMove = false;
         int moveToReturn = 0;
         int[][] temp = board.convertToArray();
-        
+
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
                 if (temp[i][j] == 0) {
                     gotMove = true;
-                    moveToReturn = i*8+col+1;
+                    moveToReturn = i*8+j+1;
                     break;
                 }
             }
-            
+
             if (gotMove)    break;
         }
-        
+
         timedOut = false;
         return moveToReturn;
       }
