@@ -30,7 +30,6 @@ public class FourInALineBoard {
 
             for (int j = 1; j <= BOARD_SIZE; j++) {
                 int index1D = ((i * BOARD_SIZE) + j) - 8;
-//                System.out.println("Index value: " + index1D);
 
                 if (board.containsKey(index1D)) {
                     if (board.get(index1D).equals("X")) { printBoard.append("  X"); }
@@ -121,14 +120,4 @@ public class FourInALineBoard {
 
         return 0;
     }
-//
-    // Convert the hashMap to two arrays
-//    public boolean hasFourInARow() {
-//        ArrayList<Integer> rowIndices = new ArrayList<>();
-//        ArrayList<Integer> colIndices = new ArrayList<>();
-//        for (int key: board.keySet()) {
-//            rowIndices.add(key / 3);
-//            colIndices.add(key % 3);
-//        }
-//    }
 }

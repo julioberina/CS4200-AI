@@ -55,7 +55,7 @@ public class Main {
                     move = keyboard.next();
                     index = convertMovetoIndex(move);
 
-                    if (index != -1) {
+                    if (index != -1 && !board.getBoard().containsKey(index)) {
                         validInput = true;
                     } else {
                         System.out.println("Invalid input, try again");
@@ -193,44 +193,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
-//        HashMap<Integer, String> testMap = new HashMap<>();
-//        FourInALineBoard testBoard = new FourInALineBoard(testMap);
-//        System.out.println(testBoard.toString(false));
-//        testMap.put(1, "X");
-//        testMap.put(10, "O");
-//        testMap.put(15, "X");
-//        testMap.put(24, "O");
-//        testMap.put(30, "X");
-//        testMap.put(64, "O");
-//        System.out.println(testBoard.toString());
-//
-//        int[][] testArray = testBoard.convertToArray();
-//
-//        for (int i = 0; i < testArray.length; i++) {
-//            for (int j = 0; j < testArray.length; j++) {
-//                System.out.print(testArray[i][j] + " ");
-//            }
-//            System.out.println();
-//        }
-
-
         HashMap<Integer, String> playerPositions = new HashMap<>();
         FourInALineBoard board = new FourInALineBoard(playerPositions);
 
-//        int i = 1;
-//        while (!board.isDraw()) {
-//            board.addKeyValue(i, "X");
-//            System.out.println(board.toString());
-//            System.out.println("i = " + i);
-//            i++;
-//        }
-//
-//        for(int key: board.getBoard().keySet()) {
-//            System.out.println("Key " + key);
-//        }
 
         playGame(board);
 
-//        System.out.println("Index value: " + convertMovetoIndex("h9"));
     }
 }
